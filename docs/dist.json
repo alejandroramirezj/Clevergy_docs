@@ -1,0 +1,2558 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Clevergy connect-api",
+    "description": "Connect enables Clevergy customers to build integrations with the Clevergy platform. To request access please write to info@clever.gy.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://connect.clever.gy"
+    }
+  ],
+  "security": [
+    {
+      "firebase": []
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Create new user",
+        "description": "## Create new user\n",
+        "tags": [
+          "👤 User management",
+          "Create solar user",
+          "Create FTP integration",
+          "Create first user",
+          "Create Datadis integration",
+          "Create invoice",
+          "Obtain energy data from my users"
+        ],
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistration"
+              }
+            }
+          },
+          "description": "> - The `name` and `email` fields are required for the user registration. Please ensure they are included in your request body.\n"
+        },
+        "responses": {
+          "200": {
+            "description": "Record successfully added.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCreated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (user already exists)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/users/{userId}/status": {
+      "get": {
+        "description": "Return the user status.\n",
+        "summary": "Return user status",
+        "deprecated": true,
+        "operationId": "getUserStatus",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of the user (also available for email)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status of a given user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/houses": {
+      "get": {
+        "description": "Return the user houses\n",
+        "deprecated": true,
+        "operationId": "getUserHouses",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Houses of a given user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserHouses"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "firebase": []
+          }
+        ]
+      },
+      "post": {
+        "description": "## Create a house\nCreate a new house for the user\n",
+        "summary": "Create a house",
+        "tags": [
+          "🏠 House management",
+          "Create FTP integration",
+          "Create solar user",
+          "Create Datadis integration",
+          "Create invoice",
+          "Obtain energy data from my users"
+        ],
+        "operationId": "createHouse",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHouse"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created house",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HouseCreated"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/supplies": {
+      "get": {
+        "description": "## Return de user houses\nSearch a list of houses of the user.\n",
+        "summary": "Return the user houses",
+        "tags": [
+          "🏠 House management"
+        ],
+        "operationId": "getUserSupplies",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supplies of a given user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserHouses"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/users/{userId}": {
+      "delete": {
+        "description": "## Delete a user\n\nDelete the user's account and all its related information (meters, energy data...). **Please note that this action is irreversible.**\n\nWhen the response is a 202, the process is not immediate and usually takes several minutes until the user is permanently deleted.\n",
+        "summary": "Delete a user",
+        "tags": [
+          "👤 User management"
+        ],
+        "operationId": "deleteUserAccount",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Record successfully deleted."
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/users/{userId}/integrations/smartmeter": {
+      "post": {
+        "description": "## Link a smartmeter to a house\n\nIn order to **[verify the identity of the user with the aim of integrating with the smartmeter](https://docs.clever.gy/?path=/docs/how-to-set-up-clevergy-create-datadis-integration--docs)** is necessary that the user meets one of the following requirements, otherwise a 403 forbidden will be returned:\n* Have a house created with CUPS Code\n* Have an invoice uploaded\n* Have an ID documentation uploaded\n\n> 👀 Take into account that thee user information you introduce in the payload will overwrite the existing one.\n",
+        "summary": "Link a smartmeter to a house",
+        "tags": [
+          "🔌 Integrations",
+          "Create Datadis integration",
+          "Obtain energy data from my users"
+        ],
+        "operationId": "integrateSmartmeter",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntegrateSmartmeter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Smartmeter successfully integrated."
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/houses/{houseId}": {
+      "delete": {
+        "description": "## Delete a house\nDeletes a house by id\n",
+        "summary": "Delete a house",
+        "tags": [
+          "🏠 House management"
+        ],
+        "operationId": "deleteHouse",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "description": "Id of the house to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "House deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/{houseId}/energy": {
+      "get": {
+        "description": "## Return house energy\nReturn the energy of a house for a date period (from startDate to endDate) grouped by date based on granularity\n",
+        "summary": "Return house energy",
+        "tags": [
+          "💡Energy",
+          "Obtain energy data from my users"
+        ],
+        "operationId": "findEnergyByHouseId",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "description": "ID of a house",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Start date to filter by",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "End date to filter by",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "description": "Granularity to group by",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "YEARLY",
+                "MONTHLY",
+                "DAILY",
+                "HOURLY"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "House consumption",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EnergyItem"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/{houseId}/contracts": {
+      "post": {
+        "description": "## Create a contract\nCreates a house contract\n",
+        "summary": "Create a contract",
+        "tags": [
+          "🏠 House management"
+        ],
+        "operationId": "createHouseContract",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "description": "Id of the house",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHouseContract"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contract created successfully"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/{houseId}/invoices": {
+      "post": {
+        "description": "## Create an invoice \n> ### 📘 Learn how to use it\n> \n> This endpoint not only returns a HTTP code response, but also a structure containing a **signed URL** to immediately perform a **PUT request** in order to upload the **PDF file** of the invoice. An example is provided below.\n> \n> ### Step 1: POST the invoice metadata and obtain the upload URL\n> \n> **cURL**\n> ```bash\n> $∼ curl --request POST \\\n>      --url https://connect.clever.gy/houses/houseId/invoices \\\n>      --header 'accept: application/json' \\\n>      --header 'content-type: application/json' \\\n>      --header 'other-headers' \\\n>      --data '{\"startDate\": \"2023-12-31\", \"endDate\":\"2023-12-31\", \"totalCost\": 41.0}'\n> ```\n> \n> **Response**\n> ```json\n> $∼ {\"url\": \"https://signed-url-to-upload-the-local-file\"}\n> ```\n> \n> ### Step 2: PUT the local file to the returned URL. Please note that the URL expires in **15 minutes** for security reasons.\n> \n> **cURL**\n> ```bash\n> $∼ curl --request PUT \\\n>      --url 'https://signed-url-to-upload-the-local-file' \\\n>      --header 'content-type: application/pdf' \\\n>      --header 'other-headers' \\\n>      --data 'local-path-to-invoice-file.pdf'\n> ```\n",
+        "summary": "Create an invoice",
+        "tags": [
+          "🏠 House management",
+          "Create Datadis integration",
+          "Create invoice"
+        ],
+        "operationId": "createHouseInvoice",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "description": "Id of the house",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHouseInvoice"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invoice created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedUrl"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "House Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/{houseId}/invoices/{invoiceId}": {
+      "delete": {
+        "description": "## Delete a house invoice\n",
+        "summary": "Delete a house invoice",
+        "tags": [
+          "🏠 House management"
+        ],
+        "operationId": "deleteHouseInvoice",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "description": "Id of the house",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "description": "Id of the invoice",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invoice deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "House or Invoice Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/{houseId}/integrations/audinfor": {
+      "post": {
+        "summary": "Assign Audinfor To House",
+        "description": "Assigns an Audinfor contract id to an existing house\n",
+        "tags": [
+          "🔌 Integrations"
+        ],
+        "operationId": "assignAudinforContractIdToHouse",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "description": "Alphanumeric id from a house",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignAudinforContractIdToHouse"
+              }
+            }
+          },
+          "description": "Request"
+        },
+        "responses": {
+          "202": {
+            "description": "Audinfor contract id successfully assigned to house"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "House not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/users/{userId}/integrations/audinfor": {
+      "post": {
+        "summary": "Assign Audinfor To User",
+        "description": "Assigns an audinfor user id to an existing user\n",
+        "tags": [
+          "🔌 Integrations"
+        ],
+        "operationId": "assignAudinforUserIdToUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignAudinforUserIdToUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Audinfor user id successfully assigned to user"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/houses/{houseId}/integrations/{vendor}:update-status": {
+      "post": {
+        "description": "## Update integration status\nUpdates integration status of a vendor for an specific house\n",
+        "summary": "Update integration status",
+        "tags": [
+          "🔌 Integrations"
+        ],
+        "operationId": "updateIntegrationStatus",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "description": "Id of the house",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "vendor",
+            "in": "path",
+            "description": "Data provider",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDatadisIntegrationStatus"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated successfully"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/{houseId}/integrations": {
+      "post": {
+        "description": "## Link installation to a house\n",
+        "summary": "☀️ Link installation to a house",
+        "tags": [
+          "🔌 Integrations",
+          "Create solar user",
+          "Obtain energy data from my users"
+        ],
+        "operationId": "connectInstallation",
+        "parameters": [
+          {
+            "name": "houseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectInstallationRequest"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assigned installation to house"
+          },
+          "404": {
+            "description": "House not found"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supplies/{supplyId}/consumptions": {
+      "get": {
+        "description": "Returns the consumption of a supply. The date range depends of the startDate & endDate parameters and the grouping depends on the granularity parameter.\n",
+        "deprecated": true,
+        "operationId": "getHouseConsumption",
+        "parameters": [
+          {
+            "name": "supplyId",
+            "in": "path",
+            "description": "Refers to the CUPS of the house or the public supply id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Start date to filter from, for example 2020-01-01T01:00:00",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "End date to filter to, for example 2022-01-01T01:00:00",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "description": "Date range to group by",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "YEARLY",
+                "MONTHLY",
+                "DAILY",
+                "HOURLY"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "House consumptions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HouseDataConsumption"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/supplies/{cups}/cumulative-consumption": {
+      "get": {
+        "description": "Returns the cumulative consumption for a house.\n",
+        "deprecated": true,
+        "operationId": "getHouseCumulativeConsumption",
+        "parameters": [
+          {
+            "name": "cups",
+            "in": "path",
+            "description": "ID of a house",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Current day, for example 2023-01-01T00:00:00",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "House consumption cumulative consumption (kWh)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CumulativeConsumption"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/upload-dni": {
+      "get": {
+        "description": "## Upload DNI\n> ### 📘 Learn how to use it\n> \n> This endpoint not only returns a HTTP code response, but also a structure containing a **signed URL** to immediately perform a **PUT request** in order to upload the **JPG file** of the front part of the ID. An example is provided below.\n> \n>### Step 1: GET request with the userId as a parameter to obtain the upload URL\n> \n> **cURL**\n> ```bash\n>  $∼ curl --request GET \n>     --url 'https://connect.clever.gy/{{userId}}/upload-dni' \n>     --header 'accept: application/json'\n> ```\n> \n> **Response**\n> ```json\n> $∼ {\"url\": \"https://signed-url-to-upload-the-local-file\"}\n> ```\n> \n> ### Step 2: PUT the local file to the returned URL. Please note that the URL expires in **15 minutes** for security reasons.\n> \n> **cURL**\n> ```bash\n> $∼ curl --request PUT \\\n>      --url 'https://signed-url-to-upload-the-local-file' \\\n>      --header 'content-type: application/jpg' \\\n>      --header 'other-headers' \\\n>      --data 'local-path-to-invoice-file.jpg'\n> ```\n",
+        "summary": "Upload DNI",
+        "tags": [
+          "👤 User management",
+          "Create Datadis integration"
+        ],
+        "operationId": "uploadDni",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A signed, temporary bucket url to upload a dni image. To upload a file a PUT request adding the file as form data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadDniUrl"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    },
+    "/tips": {
+      "get": {
+        "description": "Get all public tips",
+        "summary": "Return general tips",
+        "tags": [
+          "Saving Tips"
+        ],
+        "operationId": "getPublicSavingTips",
+        "responses": {
+          "200": {
+            "description": "List of public saving tips",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicSavingTip"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/energy-communities/{energyCommunityId}/houses": {
+      "post": {
+        "description": "## Assign a house to an energy community\n",
+        "summary": "Assign a house to an energy community",
+        "tags": [
+          "🏘️ Energy communities"
+        ],
+        "operationId": "assignHouseToEnergyCommunity",
+        "parameters": [
+          {
+            "name": "energyCommunityId",
+            "in": "path",
+            "description": "Alphanumeric id from energy community",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnergyCommunityHouse"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "House successfully assigned"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/energy-communities/{energyCommunityId}/update-share": {
+      "post": {
+        "description": "## Update share\nUpdate share for an energy community house\n",
+        "summary": "Update share",
+        "tags": [
+          "🏘️ Energy communities"
+        ],
+        "operationId": "updateEnergyCommunityHouseShare",
+        "parameters": [
+          {
+            "name": "energyCommunityId",
+            "in": "path",
+            "description": "Alphanumeric id from energy community",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEnergyCommunityHouseRequest"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "House successfully updated"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/energy-communities/{communityId}/remove-house": {
+      "post": {
+        "description": "## Remove a house from an energy community\nUnlink a house from an energy community\n",
+        "summary": "Remove a house from an energy community",
+        "tags": [
+          "🏘️ Energy communities"
+        ],
+        "operationId": "removeEnergyCommunityHouseFromInstallation",
+        "parameters": [
+          {
+            "name": "communityId",
+            "in": "path",
+            "description": "Alphanumeric id from energy community",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveEnergyCommunityHouseRequest"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "House successfully removed"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorBadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorForbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/{userId}/token": {
+      "get": {
+        "description": "Returns user jwt based on the email. The jwt can be used in some endpoints of the API to obtain energy data from the user.\n",
+        "tags": [
+          "Access control"
+        ],
+        "operationId": "retrieveUserAccessToken",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Clevergy ID from the user (also available with email)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User jwt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthUser"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpErrorNotFound"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "key": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "firebase": {
+        "type": "oauth2",
+        "x-google-issuer": "public-front-back@clevergy.iam.gserviceaccount.com",
+        "x-google-jwks_uri": "https://www.googleapis.com/robot/v1/metadata/x509/public-front-back@clevergy.iam.gserviceaccount.com",
+        "x-google-audiences": "https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "/",
+            "scopes": {}
+          }
+        }
+      },
+      "key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "clevergy-api-key"
+      }
+    },
+    "schemas": {
+      "UserRegistration": {
+        "type": "object",
+        "required": [
+          "name",
+          "email"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "dni": {
+            "type": "string",
+            "example": "12345678X"
+          },
+          "termsAndConditions": {
+            "type": "boolean",
+            "deprecated": true
+          },
+          "authorizedSupplies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "deprecated": true
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "UserCreated": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "U4NW5zdmstUtRZW5Oi3S2CR5l0U2"
+          },
+          "status": {
+            "type": "string",
+            "example": "INITIAL"
+          }
+        }
+      },
+      "HttpErrorBadRequest": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "description": "Request date and time",
+            "type": "string",
+            "example": "2023-12-26T10:23:19.508+00:00"
+          },
+          "status": {
+            "description": "Http error code",
+            "type": "integer",
+            "format": "int32",
+            "example": 400
+          },
+          "error": {
+            "description": "Http error description",
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "path": {
+            "description": "Request path",
+            "type": "string",
+            "example": "/users"
+          }
+        }
+      },
+      "HttpErrorUnauthorized": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "description": "Request date and time",
+            "type": "string",
+            "example": "2023-12-26T10:23:19.508+00:00"
+          },
+          "status": {
+            "description": "Http error code",
+            "type": "integer",
+            "format": "int32",
+            "example": 401
+          },
+          "error": {
+            "description": "Http error description",
+            "type": "string",
+            "example": "Unauthorized"
+          },
+          "path": {
+            "description": "Request path",
+            "type": "string",
+            "example": "/auth/john.doe@gmail.com/token"
+          }
+        }
+      },
+      "UserStatus": {
+        "type": "object",
+        "properties": {
+          "userStatus": {
+            "type": "string",
+            "enum": [
+              "INITIAL",
+              "ACCEPTED_CONDITIONS",
+              "WAITING_FOR_HOUSES",
+              "WAITING_FOR_CONSUMPTIONS",
+              "WAITING_AUTHORIZATION",
+              "IS_NOT_HOLDER",
+              "VALIDATING_HOLDER",
+              "COMPLETED"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "description": "@deprecated use `userStatus` instead",
+            "enum": [
+              "INITIAL",
+              "WAITING_FOR_HOUSES",
+              "NOT_HOLDER",
+              "COMPLETED"
+            ]
+          },
+          "hasIdentityDocumentValidated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserHouses": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "houseId": {
+              "type": "string",
+              "example": "8ec307fc-3b4c-4f6f-b320-fa2587990a46"
+            },
+            "cups": {
+              "type": "string",
+              "example": "ES0022123456781234AB0F"
+            },
+            "address": {
+              "type": "string",
+              "example": "Leonardo da Vinci 7"
+            },
+            "postalCode": {
+              "type": "string",
+              "example": "41092"
+            },
+            "firstConsumptionDate": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2022-12-31T23:00:00"
+            },
+            "lastConsumptionDate": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2023-12-31T22:00:00"
+            }
+          }
+        }
+      },
+      "HttpErrorForbidden": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "description": "Request date and time",
+            "type": "string",
+            "example": "2023-12-26T10:23:19.508+00:00"
+          },
+          "status": {
+            "description": "Http error code",
+            "type": "integer",
+            "format": "int32",
+            "example": 403
+          },
+          "error": {
+            "description": "Http error description",
+            "type": "string",
+            "example": "Forbidden"
+          },
+          "path": {
+            "description": "Request path",
+            "type": "string",
+            "example": "/users/U4NW5zdmstUtRZW5Oi3S2CR5l0U2/houses"
+          }
+        }
+      },
+      "HttpErrorNotFound": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "description": "Request date and time",
+            "type": "string",
+            "example": "2023-12-26T10:23:19.508+00:00"
+          },
+          "status": {
+            "description": "Http error code",
+            "type": "integer",
+            "format": "int32",
+            "example": 404
+          },
+          "error": {
+            "description": "Http error description",
+            "type": "string",
+            "example": "Not Found"
+          },
+          "path": {
+            "description": "Request path",
+            "type": "string",
+            "example": "/auth/alice.smith@gmail.com/token"
+          }
+        }
+      },
+      "CreateHouse": {
+        "type": "object",
+        "description": "Create house request",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "House address",
+            "example": "Leonardo da Vinci 7"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "House postal code",
+            "example": "41092"
+          },
+          "cups": {
+            "type": "string",
+            "description": "When filled, CUPS of the supply to connect",
+            "example": "ES0022123456781234AB0F"
+          }
+        }
+      },
+      "HouseCreated": {
+        "type": "object",
+        "description": "Create house response",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "House id",
+            "example": "f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454"
+          },
+          "address": {
+            "type": "string",
+            "description": "House address",
+            "example": "Leonardo da Vinci 7"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "House postal code",
+            "example": "41092"
+          }
+        }
+      },
+      "IntegrateSmartmeter": {
+        "type": "object",
+        "description": "Smartmeter integration request",
+        "required": [
+          "name",
+          "nif",
+          "termsAndConditions"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "nif": {
+            "type": "string"
+          },
+          "termsAndConditions": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EnergyItem": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "solar": {
+            "type": "object",
+            "properties": {
+              "production": {
+                "type": "number",
+                "format": "float"
+              }
+            }
+          },
+          "house": {
+            "type": "object",
+            "properties": {
+              "consumption": {
+                "type": "number",
+                "format": "float"
+              },
+              "selfConsumption": {
+                "type": "number",
+                "format": "float"
+              }
+            }
+          },
+          "grid": {
+            "type": "object",
+            "properties": {
+              "import": {
+                "type": "number",
+                "format": "float"
+              },
+              "export": {
+                "type": "number",
+                "format": "float"
+              }
+            }
+          },
+          "battery": {
+            "type": "object",
+            "properties": {
+              "charge": {
+                "type": "number",
+                "format": "float"
+              },
+              "discharge": {
+                "type": "number",
+                "format": "float"
+              }
+            }
+          },
+          "energyCommunities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "SOLAR",
+                    "WIND",
+                    "HYDRO"
+                  ]
+                },
+                "production": {
+                  "type": "number",
+                  "format": "float"
+                }
+              },
+              "required": [
+                "type",
+                "production"
+              ]
+            }
+          }
+        },
+        "required": [
+          "date"
+        ]
+      },
+      "CreateHouseContract": {
+        "type": "object",
+        "description": "Create house contract request",
+        "properties": {
+          "contractPower": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Contracted power. One item per period (P1, P2)",
+            "example": [
+              3.5,
+              3.5
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-12-31T23:00:00",
+            "description": "Contract start date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-12-31T23:00:00",
+            "description": "Contract end date"
+          },
+          "codefare": {
+            "type": "string",
+            "example": "2.0TD",
+            "description": "Contract codefare"
+          },
+          "tariffName": {
+            "type": "string",
+            "example": "Tariff name",
+            "description": "Contract tariff name"
+          },
+          "distributor": {
+            "type": "string",
+            "example": "Energydistributor",
+            "description": "Contract distributor"
+          },
+          "provider": {
+            "type": "string",
+            "example": "Energyprovider",
+            "description": "Contract provider"
+          }
+        }
+      },
+      "CreateHouseInvoice": {
+        "type": "object",
+        "description": "Create house invoice request",
+        "required": [
+          "startDate",
+          "endDate",
+          "totalCost"
+        ],
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2022-12-31",
+            "description": "Start of invoicing period"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2022-12-31",
+            "description": "End of invoicing period"
+          },
+          "totalCost": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "Total cost in €"
+          },
+          "energyConsumptionP1": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "P1 consumptions in kWh"
+          },
+          "energyConsumptionP2": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "P2 consumptions in kWh"
+          },
+          "energyConsumptionP3": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "P3 consumptions in kWh"
+          },
+          "totalEnergyConsumption": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "Total consumptions in kWh"
+          },
+          "energyCost": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "Energy cost in €"
+          },
+          "powerCost": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "Power cost in €"
+          },
+          "otherCost": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "Sum of other costs in €"
+          },
+          "discountCost": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "Total discounts in €"
+          },
+          "taxCost": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883",
+            "description": "Total taxes in €"
+          },
+          "selfConsumptionCost": {
+            "type": "number",
+            "format": "float",
+            "example": "-0.25",
+            "description": "Total surplus of self consumption in €"
+          }
+        }
+      },
+      "SignedUrl": {
+        "type": "object",
+        "description": "Bucket url to put a file",
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "https://signed_url_to_put_the_object",
+            "description": "Signed url to put the object"
+          }
+        }
+      },
+      "AssignAudinforContractIdToHouse": {
+        "type": "object",
+        "description": "Audinfor house integration request",
+        "required": [
+          "contratoId"
+        ],
+        "properties": {
+          "contratoId": {
+            "type": "string",
+            "example": "1234"
+          }
+        }
+      },
+      "AssignAudinforUserIdToUser": {
+        "type": "object",
+        "description": "Audinfor user integration request",
+        "required": [
+          "idCliente"
+        ],
+        "properties": {
+          "idCliente": {
+            "type": "string",
+            "example": "1234"
+          }
+        }
+      },
+      "UpdateDatadisIntegrationStatus": {
+        "type": "object",
+        "description": "Update datadis integration status request",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "CONNECTED",
+            "description": "Supply contract start date",
+            "enum": [
+              "CONNECTED",
+              "DISCONNECTED"
+            ]
+          },
+          "eventDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-12-31T22:00:00",
+            "description": "Update status event date"
+          }
+        }
+      },
+      "ConnectInstallationRequest": {
+        "type": "object",
+        "properties": {
+          "integrationId": {
+            "type": "number"
+          },
+          "stationCode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "integrationId",
+          "stationCode"
+        ]
+      },
+      "UserConsumptionCategory": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "example": "Valle"
+          },
+          "kwh": {
+            "type": "number",
+            "format": "float",
+            "example": 0.883
+          }
+        }
+      },
+      "HouseConsumption": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-12-01T00:00:00Z"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserConsumptionCategory"
+            }
+          },
+          "kwh": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883"
+          }
+        }
+      },
+      "HouseDataConsumption": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HouseConsumption"
+            }
+          },
+          "rateType": {
+            "type": "string",
+            "example": "REGULATED"
+          },
+          "total": {
+            "type": "number",
+            "format": "float",
+            "example": "0.883"
+          }
+        }
+      },
+      "CumulativeConsumption": {
+        "type": "object",
+        "properties": {
+          "currentConsumption": {
+            "type": "number",
+            "format": "float",
+            "example": 150.3
+          },
+          "estimatedConsumption": {
+            "type": "number",
+            "format": "float",
+            "example": 188.7
+          },
+          "previousYearConsumption": {
+            "type": "number",
+            "format": "float",
+            "example": 204.1
+          }
+        }
+      },
+      "UploadDniUrl": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "urlBack": {
+            "type": "string"
+          }
+        }
+      },
+      "PublicSavingTip": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Elige neveras con buena calificación energética"
+          },
+          "text": {
+            "type": "string",
+            "example": "Si tu nevera es antigua, plantéate comprar una nevera con  calificación energética alta. Podrás ahorrar un 20% en tu factura."
+          }
+        }
+      },
+      "EnergyCommunityHouse": {
+        "type": "object",
+        "description": "Assign a house to an energy community",
+        "required": [
+          "houseId",
+          "share"
+        ],
+        "properties": {
+          "houseId": {
+            "type": "string",
+            "description": "House Id"
+          },
+          "share": {
+            "type": "number",
+            "description": "Share (in percentage) in the energy community"
+          },
+          "installationId": {
+            "type": "string",
+            "description": "Installation Id"
+          }
+        }
+      },
+      "UpdateEnergyCommunityHouseRequest": {
+        "type": "object",
+        "description": "Update energy community house share",
+        "required": [
+          "houseId",
+          "share"
+        ],
+        "properties": {
+          "houseId": {
+            "type": "string",
+            "description": "House Id"
+          },
+          "share": {
+            "type": "number",
+            "description": "Share (in percentage) in the energy community"
+          },
+          "installationId": {
+            "type": "string",
+            "description": "Installation Id"
+          }
+        }
+      },
+      "RemoveEnergyCommunityHouseRequest": {
+        "type": "object",
+        "description": "Remove energy community house",
+        "required": [
+          "houseId"
+        ],
+        "properties": {
+          "houseId": {
+            "type": "string",
+            "description": "House Id"
+          },
+          "installationId": {
+            "type": "string",
+            "description": "Installation Id"
+          }
+        }
+      },
+      "AuthUser": {
+        "type": "object",
+        "properties": {
+          "jwt": {
+            "type": "string",
+            "example": "eyJhbGciOiJSJhdWQiOiJodHRwczopdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXRF0IjoxNzAzODU0NzY5LCJpc3MiOiJwdWJsaWMtZnJvbnQtYmFja0BjbGV2ZXJneS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6InB1YmxpYy1mcm9udC1iYWNrQGNXA"
+          },
+          "userId": {
+            "type": "string",
+            "example": "U7Q02aMJm9VokGsNIZmID3BK25p3"
+          }
+        }
+      }
+    }
+  },
+  "x-google-endpoints": [
+    {
+      "name": "connect.clever.gy",
+      "allowCors": true
+    }
+  ],
+  "x-google-backend": {
+    "address": "https://public-front-back-tl56gypzra-ew.a.run.app"
+  }
+}
