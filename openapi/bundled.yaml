@@ -18,12 +18,12 @@ paths:
         ## Create new user
       tags:
         - 👤 User management
-        - Create solar user
-        - Create FTP integration
-        - Create first user
-        - Create Datadis integration
-        - Create invoice
-        - Obtain energy data from my users
+        
+        
+        
+        
+       
+        
       operationId: createUser
       parameters:
         - name: userRegistration
@@ -121,11 +121,11 @@ paths:
       summary: Create a house
       tags:
         - 🏠 House management
-        - Create FTP integration
-        - Create solar user
-        - Create Datadis integration
-        - Create invoice
-        - Obtain energy data from my users
+        
+        
+        
+       
+        
       operationId: createHouse
       parameters:
         - name: userId
@@ -235,8 +235,8 @@ paths:
       summary: Link a smartmeter to a house
       tags:
         - 🔌 Integrations
-        - Create Datadis integration
-        - Obtain energy data from my users
+        
+        
       operationId: integrateSmartmeter
       parameters:
         - name: userId
@@ -313,7 +313,7 @@ paths:
       summary: Return house energy
       tags:
         - 💡Energy
-        - Obtain energy data from my users
+        
       operationId: findEnergyByHouseId
       parameters:
         - name: houseId
@@ -424,8 +424,8 @@ paths:
       summary: Create an invoice
       tags:
         - 🏠 House management
-        - Create Datadis integration
-        - Create invoice
+        
+       
       operationId: createHouseInvoice
       parameters:
         - name: houseId
@@ -615,8 +615,8 @@ paths:
       summary: ☀️ Link installation to a house
       tags:
         - 🔌 Integrations
-        - Create solar user
-        - Obtain energy data from my users
+        
+        
       operationId: connectInstallation
       parameters:
         - name: houseId
@@ -767,7 +767,7 @@ paths:
       summary: Upload DNI
       tags:
         - 👤 User management
-        - Create Datadis integration
+        
       operationId: uploadDni
       parameters:
         - name: userId
