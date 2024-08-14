@@ -1,0 +1,43 @@
+delete:
+  description: |
+    ## Delete a house invoice
+  summary: Delete a house invoice
+  tags:
+    - 🏠 House management
+  operationId: deleteHouseInvoice
+  parameters:
+    - name: houseId
+      in: path
+      description: Id of the house
+      required: true
+      schema:
+        type: string
+    - name: invoiceId
+      in: path
+      description: Id of the invoice
+      required: true
+      schema:
+        type: string
+  security:
+    - key: []
+  responses:
+    '200':
+      description: Invoice deleted successfully
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '404':
+      description: House or Invoice Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

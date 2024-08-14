@@ -1,0 +1,15 @@
+type: object
+description: Update energy community house share
+required:
+  - houseId
+  - share
+properties:
+  houseId:
+    type: string
+    description: House Id
+  share:
+    type: number
+    description: Share (in percentage) in the energy community
+  installationId:
+    type: string
+    description: Installation Id

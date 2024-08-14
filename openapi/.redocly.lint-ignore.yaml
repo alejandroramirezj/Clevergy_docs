@@ -1,0 +1,18 @@
+# This file instructs Redocly's linter to ignore the rules contained for specific parts of your API.
+# See https://redoc.ly/docs/cli/ for more information.
+openapi.yaml:
+  info-license:
+    - '#/info'
+  spec:
+    - '#/definitions/UserRegistration/properties/termsAndConditions/deprecated'
+    - '#/definitions/UserRegistration/properties/authorizedSupplies/deprecated'
+    - '#/paths/~1users~1{userId}~1status/get/tags'
+    - '#/paths/~1users~1{userId}~1houses/get/tags'
+    - '#/paths/~1supplies~1{supplyId}~1consumptions/get/tags'
+    - '#/paths/~1supplies~1{cups}~1cumulative-consumption/get/tags'
+    - '#/securityDefinitions/firebase'
+  operation-4xx-response:
+    - '#/paths/~1houses~1{houseId}~1energy/get/responses'
+    - '#/paths/~1tips/get/responses'
+  operation-summary:
+    - '#/paths/~1auth~1{userId}~1token/get/summary'

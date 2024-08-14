@@ -1,0 +1,15 @@
+type: object
+description: Smartmeter integration request
+required:
+  - name
+  - nif
+  - termsAndConditions
+properties:
+  name:
+    type: string
+  surname:
+    type: string
+  nif:
+    type: string
+  termsAndConditions:
+    type: boolean

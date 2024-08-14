@@ -1,0 +1,15 @@
+type: object
+description: Update datadis integration status request
+properties:
+  status:
+    type: string
+    example: CONNECTED
+    description: Supply contract start date
+    enum:
+      - CONNECTED
+      - DISCONNECTED
+  eventDate:
+    type: string
+    format: date-time
+    example: '2023-12-31T22:00:00'
+    description: Update status event date

@@ -1,0 +1,37 @@
+type: object
+description: Create house contract request
+properties:
+  contractPower:
+    type: array
+    items:
+      type: number
+    description: Contracted power. One item per period (P1, P2)
+    example:
+      - 3.5
+      - 3.5
+  startDate:
+    type: string
+    format: date-time
+    example: '2022-12-31T23:00:00'
+    description: Contract start date
+  endDate:
+    type: string
+    format: date-time
+    example: '2022-12-31T23:00:00'
+    description: Contract end date
+  codefare:
+    type: string
+    example: 2.0TD
+    description: Contract codefare
+  tariffName:
+    type: string
+    example: Tariff name
+    description: Contract tariff name
+  distributor:
+    type: string
+    example: Energydistributor
+    description: Contract distributor
+  provider:
+    type: string
+    example: Energyprovider
+    description: Contract provider

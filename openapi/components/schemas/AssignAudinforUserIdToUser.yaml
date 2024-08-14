@@ -1,0 +1,8 @@
+type: object
+description: Audinfor user integration request
+required:
+  - idCliente
+properties:
+  idCliente:
+    type: string
+    example: '1234'

@@ -1,0 +1,57 @@
+type: object
+properties:
+  date:
+    type: string
+    format: date-time
+  solar:
+    type: object
+    properties:
+      production:
+        type: number
+        format: float
+  house:
+    type: object
+    properties:
+      consumption:
+        type: number
+        format: float
+      selfConsumption:
+        type: number
+        format: float
+  grid:
+    type: object
+    properties:
+      import:
+        type: number
+        format: float
+      export:
+        type: number
+        format: float
+  battery:
+    type: object
+    properties:
+      charge:
+        type: number
+        format: float
+      discharge:
+        type: number
+        format: float
+  energyCommunities:
+    type: array
+    items:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - SOLAR
+            - WIND
+            - HYDRO
+        production:
+          type: number
+          format: float
+      required:
+        - type
+        - production
+required:
+  - date

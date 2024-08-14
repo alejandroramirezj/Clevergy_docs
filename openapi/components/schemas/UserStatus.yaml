@@ -1,0 +1,23 @@
+type: object
+properties:
+  userStatus:
+    type: string
+    enum:
+      - INITIAL
+      - ACCEPTED_CONDITIONS
+      - WAITING_FOR_HOUSES
+      - WAITING_FOR_CONSUMPTIONS
+      - WAITING_AUTHORIZATION
+      - IS_NOT_HOLDER
+      - VALIDATING_HOLDER
+      - COMPLETED
+  status:
+    type: string
+    description: '@deprecated use `userStatus` instead'
+    enum:
+      - INITIAL
+      - WAITING_FOR_HOUSES
+      - NOT_HOLDER
+      - COMPLETED
+  hasIdentityDocumentValidated:
+    type: boolean

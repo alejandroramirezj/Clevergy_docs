@@ -1,0 +1,48 @@
+post:
+  summary: Create new user
+  description: |
+    ## Create new user
+  tags:
+    - 👤 User management
+    - Create solar user
+    - Create FTP integration
+    - Create first user
+    - Create Datadis integration
+    - Create invoice
+    - Obtain energy data from my users
+  operationId: createUser
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UserRegistration.yaml
+    description: >
+      > - The `name` and `email` fields are required for the user registration.
+      Please ensure they are included in your request body.
+  responses:
+    '200':
+      description: Record successfully added.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserCreated.yaml
+    '400':
+      description: Bad request (user already exists)
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorBadRequest.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

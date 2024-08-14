@@ -1,0 +1,8 @@
+type: object
+properties:
+  id:
+    type: string
+    example: U4NW5zdmstUtRZW5Oi3S2CR5l0U2
+  status:
+    type: string
+    example: INITIAL

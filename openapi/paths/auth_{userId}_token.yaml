@@ -1,0 +1,41 @@
+get:
+  description: >
+    Returns user jwt based on the email. The jwt can be used in some endpoints
+    of the API to obtain energy data from the user.
+  tags:
+    - Access control
+  operationId: retrieveUserAccessToken
+  parameters:
+    - name: userId
+      in: path
+      description: Clevergy ID from the user (also available with email)
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: User jwt
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AuthUser.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

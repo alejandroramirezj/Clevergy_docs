@@ -1,0 +1,55 @@
+post:
+  description: |
+    ## Remove a house from an energy community
+    Unlink a house from an energy community
+  summary: Remove a house from an energy community
+  tags:
+    - 🏘️ Energy communities
+  operationId: removeEnergyCommunityHouseFromInstallation
+  parameters:
+    - name: communityId
+      in: path
+      description: Alphanumeric id from energy community
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RemoveEnergyCommunityHouseRequest.yaml
+  security:
+    - key: []
+  responses:
+    '200':
+      description: House successfully removed
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorBadRequest.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

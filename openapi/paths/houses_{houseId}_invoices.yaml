@@ -1,0 +1,115 @@
+post:
+  description: >
+    ## Create an invoice 
+
+    > ### 📘 Learn how to use it
+
+    > 
+
+    > This endpoint not only returns a HTTP code response, but also a structure
+    containing a **signed URL** to immediately perform a **PUT request** in
+    order to upload the **PDF file** of the invoice. An example is provided
+    below.
+
+    > 
+
+    > ### Step 1: POST the invoice metadata and obtain the upload URL
+
+    > 
+
+    > **cURL**
+
+    > ```bash
+
+    > $∼ curl --request POST \
+
+    >      --url https://connect.clever.gy/houses/houseId/invoices \
+
+    >      --header 'accept: application/json' \
+
+    >      --header 'content-type: application/json' \
+
+    >      --header 'other-headers' \
+
+    >      --data '{"startDate": "2023-12-31", "endDate":"2023-12-31",
+    "totalCost": 41.0}'
+
+    > ```
+
+    > 
+
+    > **Response**
+
+    > ```json
+
+    > $∼ {"url": "https://signed-url-to-upload-the-local-file"}
+
+    > ```
+
+    > 
+
+    > ### Step 2: PUT the local file to the returned URL. Please note that the
+    URL expires in **15 minutes** for security reasons.
+
+    > 
+
+    > **cURL**
+
+    > ```bash
+
+    > $∼ curl --request PUT \
+
+    >      --url 'https://signed-url-to-upload-the-local-file' \
+
+    >      --header 'content-type: application/pdf' \
+
+    >      --header 'other-headers' \
+
+    >      --data 'local-path-to-invoice-file.pdf'
+
+    > ```
+  summary: Create an invoice
+  tags:
+    - 🏠 House management
+    - Create Datadis integration
+    - Create invoice
+  operationId: createHouseInvoice
+  parameters:
+    - name: houseId
+      in: path
+      description: Id of the house
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateHouseInvoice.yaml
+  security:
+    - key: []
+  responses:
+    '200':
+      description: Invoice created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SignedUrl.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '404':
+      description: House Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

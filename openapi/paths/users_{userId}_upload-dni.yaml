@@ -1,0 +1,105 @@
+get:
+  description: >
+    ## Upload DNI
+
+    > ### 📘 Learn how to use it
+
+    > 
+
+    > This endpoint not only returns a HTTP code response, but also a structure
+    containing a **signed URL** to immediately perform a **PUT request** in
+    order to upload the **JPG file** of the front part of the ID. An example is
+    provided below.
+
+    > 
+
+    >### Step 1: GET request with the userId as a parameter to obtain the upload
+    URL
+
+    > 
+
+    > **cURL**
+
+    > ```bash
+
+    >  $∼ curl --request GET 
+
+    >     --url 'https://connect.clever.gy/{{userId}}/upload-dni' 
+
+    >     --header 'accept: application/json'
+
+    > ```
+
+    > 
+
+    > **Response**
+
+    > ```json
+
+    > $∼ {"url": "https://signed-url-to-upload-the-local-file"}
+
+    > ```
+
+    > 
+
+    > ### Step 2: PUT the local file to the returned URL. Please note that the
+    URL expires in **15 minutes** for security reasons.
+
+    > 
+
+    > **cURL**
+
+    > ```bash
+
+    > $∼ curl --request PUT \
+
+    >      --url 'https://signed-url-to-upload-the-local-file' \
+
+    >      --header 'content-type: application/jpg' \
+
+    >      --header 'other-headers' \
+
+    >      --data 'local-path-to-invoice-file.jpg'
+
+    > ```
+  summary: Upload DNI
+  tags:
+    - 👤 User management
+    - Create Datadis integration
+  operationId: uploadDni
+  parameters:
+    - name: userId
+      in: path
+      description: ID of user
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: >-
+        A signed, temporary bucket url to upload a dni image. To upload a file a
+        PUT request adding the file as form data
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UploadDniUrl.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

@@ -1,0 +1,55 @@
+post:
+  description: |
+    ## Update share
+    Update share for an energy community house
+  summary: Update share
+  tags:
+    - 🏘️ Energy communities
+  operationId: updateEnergyCommunityHouseShare
+  parameters:
+    - name: energyCommunityId
+      in: path
+      description: Alphanumeric id from energy community
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UpdateEnergyCommunityHouseRequest.yaml
+  security:
+    - key: []
+  responses:
+    '200':
+      description: House successfully updated
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorBadRequest.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

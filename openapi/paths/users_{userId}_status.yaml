@@ -1,0 +1,32 @@
+get:
+  description: |
+    Return the user status.
+  summary: Return user status
+  deprecated: true
+  operationId: getUserStatus
+  parameters:
+    - name: userId
+      in: path
+      description: ID of the user (also available for email)
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Status of a given user
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserStatus.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

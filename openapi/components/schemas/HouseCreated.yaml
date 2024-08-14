@@ -1,0 +1,15 @@
+type: object
+description: Create house response
+properties:
+  id:
+    type: string
+    description: House id
+    example: f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454
+  address:
+    type: string
+    description: House address
+    example: Leonardo da Vinci 7
+  postalCode:
+    type: string
+    description: House postal code
+    example: '41092'

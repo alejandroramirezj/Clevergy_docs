@@ -1,0 +1,49 @@
+post:
+  summary: Assign Audinfor To House
+  description: |
+    Assigns an Audinfor contract id to an existing house
+  tags:
+    - 🔌 Integrations
+  operationId: assignAudinforContractIdToHouse
+  parameters:
+    - name: houseId
+      in: path
+      description: Alphanumeric id from a house
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/AssignAudinforContractIdToHouse.yaml
+    description: Request
+  responses:
+    '202':
+      description: Audinfor contract id successfully assigned to house
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: House not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

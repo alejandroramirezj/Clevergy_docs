@@ -1,0 +1,15 @@
+type: object
+description: Create house request
+properties:
+  address:
+    type: string
+    description: House address
+    example: Leonardo da Vinci 7
+  postalCode:
+    type: string
+    description: House postal code
+    example: '41092'
+  cups:
+    type: string
+    description: When filled, CUPS of the supply to connect
+    example: ES0022123456781234AB0F

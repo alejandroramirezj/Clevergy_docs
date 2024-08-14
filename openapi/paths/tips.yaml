@@ -1,0 +1,22 @@
+get:
+  description: Get all public tips
+  summary: Return general tips
+  tags:
+    - Saving Tips
+  operationId: getPublicSavingTips
+  responses:
+    '200':
+      description: List of public saving tips
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/PublicSavingTip.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security: []

@@ -1,0 +1,7 @@
+type: object
+description: Bucket url to put a file
+properties:
+  url:
+    type: string
+    example: https://signed_url_to_put_the_object
+    description: Signed url to put the object

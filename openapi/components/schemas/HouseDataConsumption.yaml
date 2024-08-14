@@ -1,0 +1,13 @@
+type: object
+properties:
+  data:
+    type: array
+    items:
+      $ref: ./HouseConsumption.yaml
+  rateType:
+    type: string
+    example: REGULATED
+  total:
+    type: number
+    format: float
+    example: '0.883'

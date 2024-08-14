@@ -1,0 +1,43 @@
+post:
+  description: |
+    ## Update integration status
+    Updates integration status of a vendor for an specific house
+  summary: Update integration status
+  tags:
+    - 🔌 Integrations
+  operationId: updateIntegrationStatus
+  parameters:
+    - name: houseId
+      in: path
+      description: Id of the house
+      required: true
+      schema:
+        type: string
+    - name: vendor
+      in: path
+      description: Data provider
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UpdateDatadisIntegrationStatus.yaml
+  security:
+    - key: []
+  responses:
+    '200':
+      description: Updated successfully
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

@@ -1,0 +1,67 @@
+post:
+  description: >
+    ## Link a smartmeter to a house
+
+
+    In order to **[verify the identity of the user with the aim of integrating
+    with the
+    smartmeter](https://docs.clever.gy/?path=/docs/how-to-set-up-clevergy-create-datadis-integration--docs)**
+    is necessary that the user meets one of the following requirements,
+    otherwise a 403 forbidden will be returned:
+
+    * Have a house created with CUPS Code
+
+    * Have an invoice uploaded
+
+    * Have an ID documentation uploaded
+
+
+    > 👀 Take into account that thee user information you introduce in the
+    payload will overwrite the existing one.
+  summary: Link a smartmeter to a house
+  tags:
+    - 🔌 Integrations
+    - Create Datadis integration
+    - Obtain energy data from my users
+  operationId: integrateSmartmeter
+  parameters:
+    - name: userId
+      in: path
+      description: ID of user
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/IntegrateSmartmeter.yaml
+  responses:
+    '200':
+      description: Smartmeter successfully integrated.
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

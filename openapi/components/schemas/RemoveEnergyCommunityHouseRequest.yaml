@@ -1,0 +1,11 @@
+type: object
+description: Remove energy community house
+required:
+  - houseId
+properties:
+  houseId:
+    type: string
+    description: House Id
+  installationId:
+    type: string
+    description: Installation Id

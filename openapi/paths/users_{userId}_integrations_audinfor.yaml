@@ -1,0 +1,48 @@
+post:
+  summary: Assign Audinfor To User
+  description: |
+    Assigns an audinfor user id to an existing user
+  tags:
+    - 🔌 Integrations
+  operationId: assignAudinforUserIdToUser
+  parameters:
+    - name: userId
+      in: path
+      description: ID of user
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/AssignAudinforUserIdToUser.yaml
+  responses:
+    '200':
+      description: Audinfor user id successfully assigned to user
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

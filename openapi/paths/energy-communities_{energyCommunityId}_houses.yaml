@@ -1,0 +1,48 @@
+post:
+  description: |
+    ## Assign a house to an energy community
+  summary: Assign a house to an energy community
+  tags:
+    - 🏘️ Energy communities
+  operationId: assignHouseToEnergyCommunity
+  parameters:
+    - name: energyCommunityId
+      in: path
+      description: Alphanumeric id from energy community
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/EnergyCommunityHouse.yaml
+  security:
+    - key: []
+  responses:
+    '201':
+      description: House successfully assigned
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorBadRequest.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '404':
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

@@ -1,0 +1,14 @@
+type: object
+properties:
+  date:
+    type: string
+    format: date-time
+    example: '2023-12-01T00:00:00Z'
+  categories:
+    type: array
+    items:
+      $ref: ./UserConsumptionCategory.yaml
+  kwh:
+    type: number
+    format: float
+    example: '0.883'

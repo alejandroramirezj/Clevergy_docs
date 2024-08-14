@@ -1,0 +1,37 @@
+post:
+  description: |
+    ## Create a contract
+    Creates a house contract
+  summary: Create a contract
+  tags:
+    - 🏠 House management
+  operationId: createHouseContract
+  parameters:
+    - name: houseId
+      in: path
+      description: Id of the house
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateHouseContract.yaml
+  security:
+    - key: []
+  responses:
+    '200':
+      description: Contract created successfully
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

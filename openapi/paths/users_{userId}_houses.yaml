@@ -1,0 +1,91 @@
+get:
+  description: |
+    Return the user houses
+  deprecated: true
+  operationId: getUserHouses
+  parameters:
+    - name: userId
+      in: path
+      description: ID of user
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Houses of a given user
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserHouses.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - firebase: []
+post:
+  description: |
+    ## Create a house
+    Create a new house for the user
+  summary: Create a house
+  tags:
+    - 🏠 House management
+    - Create FTP integration
+    - Create solar user
+    - Create Datadis integration
+    - Create invoice
+    - Obtain energy data from my users
+  operationId: createHouse
+  parameters:
+    - name: userId
+      in: path
+      description: ID of user
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateHouse.yaml
+  security:
+    - key: []
+  responses:
+    '200':
+      description: Created house
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HouseCreated.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

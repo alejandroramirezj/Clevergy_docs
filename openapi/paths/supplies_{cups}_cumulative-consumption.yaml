@@ -1,0 +1,50 @@
+get:
+  description: |
+    Returns the cumulative consumption for a house.
+  deprecated: true
+  operationId: getHouseCumulativeConsumption
+  parameters:
+    - name: cups
+      in: path
+      description: ID of a house
+      required: true
+      schema:
+        type: string
+    - name: date
+      in: query
+      description: Current day, for example 2023-01-01T00:00:00
+      required: true
+      schema:
+        type: string
+        format: date-time
+  responses:
+    '200':
+      description: House consumption cumulative consumption (kWh)
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CumulativeConsumption.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

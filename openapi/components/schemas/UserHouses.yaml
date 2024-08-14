@@ -1,0 +1,24 @@
+type: array
+items:
+  type: object
+  properties:
+    houseId:
+      type: string
+      example: 8ec307fc-3b4c-4f6f-b320-fa2587990a46
+    cups:
+      type: string
+      example: ES0022123456781234AB0F
+    address:
+      type: string
+      example: Leonardo da Vinci 7
+    postalCode:
+      type: string
+      example: '41092'
+    firstConsumptionDate:
+      type: string
+      format: date-time
+      example: '2022-12-31T23:00:00'
+    lastConsumptionDate:
+      type: string
+      format: date-time
+      example: '2023-12-31T22:00:00'

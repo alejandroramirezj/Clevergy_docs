@@ -1,0 +1,42 @@
+get:
+  description: |
+    ## Return de user houses
+    Search a list of houses of the user.
+  summary: Return the user houses
+  tags:
+    - 🏠 House management
+  operationId: getUserSupplies
+  parameters:
+    - name: userId
+      in: path
+      description: ID of user
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Supplies of a given user
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserHouses.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

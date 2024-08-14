@@ -1,0 +1,14 @@
+type: object
+properties:
+  currentConsumption:
+    type: number
+    format: float
+    example: 150.3
+  estimatedConsumption:
+    type: number
+    format: float
+    example: 188.7
+  previousYearConsumption:
+    type: number
+    format: float
+    example: 204.1

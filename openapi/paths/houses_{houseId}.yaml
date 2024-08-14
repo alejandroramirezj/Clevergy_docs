@@ -1,0 +1,44 @@
+delete:
+  description: |
+    ## Delete a house
+    Deletes a house by id
+  summary: Delete a house
+  tags:
+    - 🏠 House management
+  operationId: deleteHouse
+  parameters:
+    - name: houseId
+      in: path
+      description: Id of the house to delete
+      required: true
+      schema:
+        type: string
+  security:
+    - key: []
+  responses:
+    '200':
+      description: House deleted successfully
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorForbidden.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml

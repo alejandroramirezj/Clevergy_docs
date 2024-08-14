@@ -1,0 +1,65 @@
+get:
+  description: >
+    Returns the consumption of a supply. The date range depends of the startDate
+    & endDate parameters and the grouping depends on the granularity parameter.
+  deprecated: true
+  operationId: getHouseConsumption
+  parameters:
+    - name: supplyId
+      in: path
+      description: Refers to the CUPS of the house or the public supply id
+      required: true
+      schema:
+        type: string
+    - name: startDate
+      in: query
+      description: Start date to filter from, for example 2020-01-01T01:00:00
+      required: true
+      schema:
+        type: string
+        format: date-time
+    - name: endDate
+      in: query
+      description: End date to filter to, for example 2022-01-01T01:00:00
+      required: true
+      schema:
+        type: string
+        format: date-time
+    - name: granularity
+      in: query
+      description: Date range to group by
+      required: true
+      schema:
+        type: string
+        enum:
+          - YEARLY
+          - MONTHLY
+          - DAILY
+          - HOURLY
+  responses:
+    '200':
+      description: House consumptions
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HouseDataConsumption.yaml
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorUnauthorized.yaml
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HttpErrorNotFound.yaml
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+  security:
+    - key: []

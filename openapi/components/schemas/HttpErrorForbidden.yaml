@@ -1,0 +1,19 @@
+type: object
+properties:
+  timestamp:
+    description: Request date and time
+    type: string
+    example: '2023-12-26T10:23:19.508+00:00'
+  status:
+    description: Http error code
+    type: integer
+    format: int32
+    example: 403
+  error:
+    description: Http error description
+    type: string
+    example: Forbidden
+  path:
+    description: Request path
+    type: string
+    example: /users/U4NW5zdmstUtRZW5Oi3S2CR5l0U2/houses

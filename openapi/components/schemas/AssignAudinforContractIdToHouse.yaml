@@ -1,0 +1,8 @@
+type: object
+description: Audinfor house integration request
+required:
+  - contratoId
+properties:
+  contratoId:
+    type: string
+    example: '1234'

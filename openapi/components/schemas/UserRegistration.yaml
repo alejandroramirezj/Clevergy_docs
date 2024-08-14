@@ -1,0 +1,26 @@
+type: object
+required:
+  - name
+  - email
+properties:
+  name:
+    type: string
+    example: John
+  surname:
+    type: string
+    example: Doe
+  email:
+    type: string
+    format: email
+    example: john.doe@example.com
+  dni:
+    type: string
+    example: 12345678X
+  termsAndConditions:
+    type: boolean
+    deprecated: true
+  authorizedSupplies:
+    type: array
+    items:
+      type: string
+    deprecated: true

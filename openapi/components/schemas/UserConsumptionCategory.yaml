@@ -1,0 +1,9 @@
+type: object
+properties:
+  label:
+    type: string
+    example: Valle
+  kwh:
+    type: number
+    format: float
+    example: 0.883

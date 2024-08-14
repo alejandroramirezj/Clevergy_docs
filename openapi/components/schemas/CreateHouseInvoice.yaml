@@ -1,0 +1,72 @@
+type: object
+description: Create house invoice request
+required:
+  - startDate
+  - endDate
+  - totalCost
+properties:
+  startDate:
+    type: string
+    format: date
+    example: '2022-12-31'
+    description: Start of invoicing period
+  endDate:
+    type: string
+    format: date
+    example: '2022-12-31'
+    description: End of invoicing period
+  totalCost:
+    type: number
+    format: float
+    example: '0.883'
+    description: Total cost in €
+  energyConsumptionP1:
+    type: number
+    format: float
+    example: '0.883'
+    description: P1 consumptions in kWh
+  energyConsumptionP2:
+    type: number
+    format: float
+    example: '0.883'
+    description: P2 consumptions in kWh
+  energyConsumptionP3:
+    type: number
+    format: float
+    example: '0.883'
+    description: P3 consumptions in kWh
+  totalEnergyConsumption:
+    type: number
+    format: float
+    example: '0.883'
+    description: Total consumptions in kWh
+  energyCost:
+    type: number
+    format: float
+    example: '0.883'
+    description: Energy cost in €
+  powerCost:
+    type: number
+    format: float
+    example: '0.883'
+    description: Power cost in €
+  otherCost:
+    type: number
+    format: float
+    example: '0.883'
+    description: Sum of other costs in €
+  discountCost:
+    type: number
+    format: float
+    example: '0.883'
+    description: Total discounts in €
+  taxCost:
+    type: number
+    format: float
+    example: '0.883'
+    description: Total taxes in €
+  selfConsumptionCost:
+    type: number
+    format: float
+    example: '-0.25'
+    description: Total surplus of self consumption in €

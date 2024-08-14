@@ -1,0 +1,9 @@
+type: object
+properties:
+  integrationId:
+    type: number
+  stationCode:
+    type: string
+required:
+  - integrationId
+  - stationCode

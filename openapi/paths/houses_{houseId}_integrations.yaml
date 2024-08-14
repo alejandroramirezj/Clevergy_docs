@@ -1,0 +1,33 @@
+post:
+  description: |
+    ## Link installation to a house
+  summary: ☀️ Link installation to a house
+  tags:
+    - 🔌 Integrations
+    - Create solar user
+    - Obtain energy data from my users
+  operationId: connectInstallation
+  parameters:
+    - name: houseId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ConnectInstallationRequest.yaml
+  security:
+    - key: []
+  responses:
+    '200':
+      description: Assigned installation to house
+    '404':
+      description: House not found
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
