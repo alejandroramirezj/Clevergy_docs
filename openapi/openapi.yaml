@@ -1,284 +1,294 @@
-openapi: 3.0.1
+swagger: '2.0'
 info:
   title: Clevergy connect-api
-  description: Connect enables Clevergy customers to build integrations with the Clevergy
-    platform. To request access please write to info@clever.gy.
+  description: Connect enables Clevergy customers to build integrations with the Clevergy platform. To request access please write to info@clever.gy.
   version: 1.0.0
-servers:
-- url: https://connect.clever.gy/
+host: connect.clever.gy
+x-google-endpoints:
+  - name: connect.clever.gy
+    allowCors: True
+schemes:
+  - https
+produces:
+  - application/json
+x-google-backend:
+  address: https://public-front-back-tl56gypzra-ew.a.run.app
 security:
-- firebase: []
+  - firebase: []
+
 paths:
   /users:
-    post:
+    get:
+      description: |
+        Obtains a paginated list of users filtered by a given criteria
       tags:
-      - 👤 User management
-      - Create solar user
-      - Create FTP integration
-      - Create first user
-      - Create Datadis integration
-      - Create invoice
-      - Obtain energy data from my users
+        - users
+      operationId: getUsers
+      parameters:
+        - name: page
+          in: query
+          description: Number of the page starting at 1
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          description: Size of the page
+          required: false
+          type: integer
+          format: int32
+        - name: sort
+          in: query
+          description: Field to order by.
+          required: false
+          type: string
+          default: id
+          enum:
+            - id
+            - name
+            - surname
+            - email
+            - nif
+        - name: direction
+          in: query
+          description: Direction of the order.
+          required: false
+          type: string
+          default: ASC
+          enum:
+            - ASC
+            - DESC
+        - name: nif
+          in: query
+          description: Filter by nif
+          required: true
+          type: string
+      security:
+        - key: []
+      responses:
+        '200':
+          description: paginated list of users
+          schema:
+            $ref: '#/definitions/UsersPage'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
       summary: Create new user
       description: |
         ## Create new user
+      tags:
+        - 👤 User management
+       
+ 
+       
+        
+       
+
       operationId: createUser
-      requestBody:
-        description: |
-          > - The `name` and `email` fields are required for the user registration. Please ensure they are included in your request body.
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/UserRegistration'
-        required: false
+      parameters:
+        - name: userRegistration
+          in: body
+          description: User registration attributes
+          schema:
+            $ref: '#/definitions/UserRegistration'
       responses:
-        "200":
+        200:
           description: Record successfully added.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreated'
-        "401":
+          schema:
+            $ref: '#/definitions/UserCreated'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "400":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '400':
           description: Bad request (user already exists)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorBadRequest'
+          schema:
+            $ref: '#/definitions/HttpErrorBadRequest'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
-      x-codegen-request-body-name: userRegistration
+        - key: []
   /users/{userId}/status:
     get:
-      summary: Return user status
       description: |
         Return the user status.
+      summary: Return user status
+      deprecated: true
       operationId: getUserStatus
       parameters:
-      - name: userId
-        in: path
-        description: ID of the user (also available for email)
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: ID of the user (also available for email)
+          required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Status of a given user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserStatus'
-        "401":
+          schema:
+            $ref: '#/definitions/UserStatus'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      deprecated: true
+          schema:
+            $ref: '#/definitions/Error'
   /users/{userId}/houses:
     get:
       description: |
         Return the user houses
+      deprecated: true
       operationId: getUserHouses
       parameters:
-      - name: userId
-        in: path
-        description: ID of user
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Houses of a given user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserHouses'
-        "401":
+          schema:
+            $ref: '#/definitions/UserHouses'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '403':
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorForbidden'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      deprecated: true
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - firebase: []
+        - firebase: []
     post:
-      tags:
-      - 🏠 House management
-      - Create FTP integration
-      - Create solar user
-      - Create Datadis integration
-      - Create invoice
-      - Obtain energy data from my users
-      summary: Create a house
       description: |
         ## Create a house
         Create a new house for the user
+      summary: Create a house
+      tags:
+        - 🏠 House management
+ 
+       
+        
+       
+
+
       operationId: createHouse
       parameters:
-      - name: userId
-        in: path
-        description: ID of user
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/CreateHouse'
-        required: false
+        - name: createHouse
+          in: body
+          schema:
+            $ref: '#/definitions/CreateHouse'
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: Created house
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HouseCreated'
-        "401":
+          schema:
+            $ref: '#/definitions/HouseCreated'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: createHouse
+          schema:
+            $ref: '#/definitions/Error'
   /users/{userId}/supplies:
     get:
-      tags:
-      - 🏠 House management
-      summary: Return the user houses
       description: |
         ## Return de user houses
         Search a list of houses of the user.
+      summary: Return the user houses
+      tags:
+        - 🏠 House management
       operationId: getUserSupplies
       parameters:
-      - name: userId
-        in: path
-        description: ID of user
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Supplies of a given user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserHouses'
-        "401":
+          schema:
+            $ref: '#/definitions/UserHouses'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
+        - key: []
+
   /users/{userId}:
     delete:
-      tags:
-      - 👤 User management
-      summary: Delete a user
       description: |
         ## Delete a user
 
         Delete the user's account and all its related information (meters, energy data...). **Please note that this action is irreversible.**
 
         When the response is a 202, the process is not immediate and usually takes several minutes until the user is permanently deleted.
+      summary: Delete a user
+      tags:
+        - 👤 User management
       operationId: deleteUserAccount
       parameters:
-      - name: userId
-        in: path
-        description: ID of user
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
           type: string
       responses:
-        "202":
+        '202':
           description: Record successfully deleted.
-          content: {}
-        "401":
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
+        - key: []
+
   /users/{userId}/integrations/smartmeter:
     post:
-      tags:
-      - 🔌 Integrations
-      - Create Datadis integration
-      - Obtain energy data from my users
-      summary: Link a smartmeter to a house
       description: |
         ## Link a smartmeter to a house
 
@@ -288,958 +298,842 @@ paths:
         * Have an ID documentation uploaded
 
         > 👀 Take into account that thee user information you introduce in the payload will overwrite the existing one.
+      summary: Link a smartmeter to a house
+      tags:
+        - 🔌 Integrations
+        
+
       operationId: integrateSmartmeter
       parameters:
-      - name: userId
-        in: path
-        description: ID of user
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/IntegrateSmartmeter'
-        required: false
+        - name: integrateSmartmeter
+          in: body
+          schema:
+            $ref: '#/definitions/IntegrateSmartmeter'
       responses:
-        "200":
+        '200':
           description: Smartmeter successfully integrated.
-          content: {}
-        "401":
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '403':
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorForbidden'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
-      x-codegen-request-body-name: integrateSmartmeter
+        - key: []
+
+  /users/{userId}/integrations/audinfor:
+    post:
+      description: |
+        Assigns an audinfor user id to an existing user
+      summary: Assign Audinfor to user
+      tags:
+        - 👤 User management
+      operationId: assignAudinforUserIdToUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          type: string
+        - name: assignAudinforUserIdToUser
+          in: body
+          schema:
+            $ref: '#/definitions/AssignAudinforUserIdToUser'
+      responses:
+        '200':
+          description: Audinfor user id successfully assigned to user
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/HttpErrorForbidden'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - key: []
+
   /houses/{houseId}:
     delete:
-      tags:
-      - 🏠 House management
-      summary: Delete a house
       description: |
         ## Delete a house
         Deletes a house by id
+      summary: Delete a house
+      tags:
+        - 🏠 House management
       operationId: deleteHouse
       parameters:
-      - name: houseId
-        in: path
-        description: Id of the house to delete
-        required: true
-        schema:
+        - name: houseId
+          in: path
+          description: Id of the house to delete
+          required: true
           type: string
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: House deleted successfully
-          content: {}
-        "401":
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '403':
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorForbidden'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
+          schema:
+            $ref: '#/definitions/Error'
+
   /houses/{houseId}/energy:
     get:
-      tags:
-      - 💡Energy
-      - Obtain energy data from my users
-      summary: Return house energy
       description: |
         ## Return house energy
         Return the energy of a house for a date period (from startDate to endDate) grouped by date based on granularity
-      operationId: findEnergyByHouseId
+      summary: Return house energy
+
+      tags:
+        - 💡Energy
+
+
+      operationId: getEnergyByHouseId
       parameters:
-      - name: houseId
-        in: path
-        description: ID of a house
-        required: true
-        schema:
+        - name: houseId
+          in: path
+          description: ID of a house
+          required: true
           type: string
-      - name: startDate
-        in: query
-        description: Start date to filter by
-        required: true
-        schema:
+        - name: startDate
+          in: query
+          description: Start date to filter by
+          required: true
           type: string
           format: date-time
-      - name: endDate
-        in: query
-        description: End date to filter by
-        required: true
-        schema:
+        - name: endDate
+          in: query
+          description: End date to filter by
+          required: true
           type: string
           format: date-time
-      - name: granularity
-        in: query
-        description: Granularity to group by
-        required: true
-        schema:
+        - name: granularity
+          in: query
+          description: Granularity to group by
+          required: true
           type: string
           enum:
-          - YEARLY
-          - MONTHLY
-          - DAILY
-          - HOURLY
+            - YEARLY
+            - MONTHLY
+            - DAILY
+            - HOURLY
+      security:
+        - key: []
       responses:
-        "200":
+        200:
           description: House consumption
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/EnergyItem'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EnergyItem'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
+
   /houses/{houseId}/contracts:
     post:
-      tags:
-      - 🏠 House management
-      summary: Create a contract
       description: |
         ## Create a contract
         Creates a house contract
+      summary: Create a contract
+      tags:
+        - 🏠 House management
       operationId: createHouseContract
       parameters:
-      - name: houseId
-        in: path
-        description: Id of the house
-        required: true
-        schema:
+        - name: houseId
+          in: path
+          description: Id of the house
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/CreateHouseContract'
-        required: false
+        - name: createHouseContract
+          in: body
+          schema:
+            $ref: '#/definitions/CreateHouseContract'
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: Contract created successfully
-          content: {}
-        "401":
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: createHouseContract
+          schema:
+            $ref: '#/definitions/Error'
+
   /houses/{houseId}/invoices:
     post:
-      tags:
-      - 🏠 House management
-      - Create Datadis integration
-      - Create invoice
+      description: |
+        ## Create an invoice
+        > ### 📘 Learn how to use it
+        >
+        > This endpoint not only returns a HTTP code response, but also a structure containing a **signed URL** to immediately perform a **PUT request** in order to upload the **PDF file** of the invoice. An example is provided below.
+        >
+        > ### Step 1: POST the invoice metadata and obtain the upload URL
+        >
+        > **cURL**
+        > ```bash
+        > $∼ curl --request POST \
+        >      --url https://connect.clever.gy/houses/houseId/invoices \
+        >      --header 'accept: application/json' \
+        >      --header 'content-type: application/json' \
+        >      --header 'other-headers' \
+        >      --data '{"startDate": "2023-12-31", "endDate":"2023-12-31", "totalCost": 41.0}'
+        > ```
+        >
+        > **Response**
+        > ```json
+        > $∼ {"url": "https://signed-url-to-upload-the-local-file"}
+        > ```
+        >
+        > ### Step 2: PUT the local file to the returned URL. Please note that the URL expires in **15 minutes** for security reasons.
+        >
+        > **cURL**
+        > ```bash
+        > $∼ curl --request PUT \
+        >      --url 'https://signed-url-to-upload-the-local-file' \
+        >      --header 'content-type: application/pdf' \
+        >      --header 'other-headers' \
+        >      --data 'local-path-to-invoice-file.pdf'
+        > ```
       summary: Create an invoice
-      description: "## Create an invoice \n> ### 📘 Learn how to use it\n> \n> This\
-        \ endpoint not only returns a HTTP code response, but also a structure containing\
-        \ a **signed URL** to immediately perform a **PUT request** in order to upload\
-        \ the **PDF file** of the invoice. An example is provided below.\n> \n> ###\
-        \ Step 1: POST the invoice metadata and obtain the upload URL\n> \n> **cURL**\n\
-        > ```bash\n> $∼ curl --request POST \\\n>      --url https://connect.clever.gy/houses/houseId/invoices\
-        \ \\\n>      --header 'accept: application/json' \\\n>      --header 'content-type:\
-        \ application/json' \\\n>      --header 'other-headers' \\\n>      --data\
-        \ '{\"startDate\": \"2023-12-31\", \"endDate\":\"2023-12-31\", \"totalCost\"\
-        : 41.0}'\n> ```\n> \n> **Response**\n> ```json\n> $∼ {\"url\": \"https://signed-url-to-upload-the-local-file\"\
-        }\n> ```\n> \n> ### Step 2: PUT the local file to the returned URL. Please\
-        \ note that the URL expires in **15 minutes** for security reasons.\n> \n\
-        > **cURL**\n> ```bash\n> $∼ curl --request PUT \\\n>      --url 'https://signed-url-to-upload-the-local-file'\
-        \ \\\n>      --header 'content-type: application/pdf' \\\n>      --header\
-        \ 'other-headers' \\\n>      --data 'local-path-to-invoice-file.pdf'\n> ```\n"
+      tags:
+        - 🏠 House management
+        
+       
+
       operationId: createHouseInvoice
       parameters:
-      - name: houseId
-        in: path
-        description: Id of the house
-        required: true
-        schema:
+        - name: houseId
+          in: path
+          description: Id of the house
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/CreateHouseInvoice'
-        required: false
+        - name: createHouseInvoice
+          in: body
+          schema:
+            $ref: '#/definitions/CreateHouseInvoice'
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: Invoice created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SignedUrl'
-        "401":
+          schema:
+            $ref: '#/definitions/SignedUrl'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: House Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: createHouseInvoice
+          schema:
+            $ref: '#/definitions/Error'
+
   /houses/{houseId}/invoices/{invoiceId}:
     delete:
-      tags:
-      - 🏠 House management
-      summary: Delete a house invoice
       description: |
         ## Delete a house invoice
+      summary: Delete a house invoice
+      tags:
+        - 🏠 House management
       operationId: deleteHouseInvoice
       parameters:
-      - name: houseId
-        in: path
-        description: Id of the house
-        required: true
-        schema:
+        - name: houseId
+          in: path
+          description: Id of the house
+          required: true
           type: string
-      - name: invoiceId
-        in: path
-        description: Id of the invoice
-        required: true
-        schema:
+        - name: invoiceId
+          in: path
+          description: Id of the invoice
+          required: true
           type: string
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: Invoice deleted successfully
-          content: {}
-        "401":
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: House or Invoice Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-  /houses/{houseId}/integrations/audinfor:
-    post:
-      tags:
-      - 🔌 Integrations
-      summary: Assign Audinfor To House
-      description: |
-        Assigns an Audinfor contract id to an existing house
-      operationId: assignAudinforContractIdToHouse
-      parameters:
-      - name: houseId
-        in: path
-        description: Alphanumeric id from a house
-        required: true
-        schema:
-          type: string
-      requestBody:
-        description: Request
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/AssignAudinforContractIdToHouse'
-        required: false
-      responses:
-        "202":
-          description: Audinfor contract id successfully assigned to house
-          content: {}
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
-          description: House not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: assignAudinforContractIdToHouse
-  /users/{userId}/integrations/audinfor:
-    post:
-      tags:
-      - 🔌 Integrations
-      summary: Assign Audinfor To User
-      description: |
-        Assigns an audinfor user id to an existing user
-      operationId: assignAudinforUserIdToUser
-      parameters:
-      - name: userId
-        in: path
-        description: ID of user
-        required: true
-        schema:
-          type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/AssignAudinforUserIdToUser'
-        required: false
-      responses:
-        "200":
-          description: Audinfor user id successfully assigned to user
-          content: {}
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: assignAudinforUserIdToUser
+          schema:
+            $ref: '#/definitions/Error'
+
   /houses/{houseId}/integrations/{vendor}:update-status:
     post:
-      tags:
-      - 🔌 Integrations
-      summary: Update integration status
       description: |
         ## Update integration status
         Updates integration status of a vendor for an specific house
+      summary: Update integration status
+      tags:
+        - 🔌 Integrations
       operationId: updateIntegrationStatus
       parameters:
-      - name: houseId
-        in: path
-        description: Id of the house
-        required: true
-        schema:
+        - name: houseId
+          in: path
+          description: Id of the house
+          required: true
           type: string
-      - name: vendor
-        in: path
-        description: Data provider
-        required: true
-        schema:
+        - name: vendor
+          in: path
+          description: Data provider
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/UpdateDatadisIntegrationStatus'
-        required: false
+        - name: updateSupplyContract
+          in: body
+          schema:
+            $ref: '#/definitions/UpdateDatadisIntegrationStatus'
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: Updated successfully
-          content: {}
-        "401":
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: updateSupplyContract
+          schema:
+            $ref: '#/definitions/Error'
   /houses/{houseId}/integrations:
     post:
-      tags:
-      - 🔌 Integrations
-      - Create solar user
-      - Obtain energy data from my users
-      summary: ☀️ Link installation to a house
       description: |
         ## Link installation to a house
+      summary: Link installation to a house
+      tags:
+        - 🔌 Integrations
+       
+
       operationId: connectInstallation
       parameters:
-      - name: houseId
-        in: path
-        required: true
-        schema:
+        - name: houseId
+          in: path
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/ConnectInstallationRequest'
-        required: false
+        - name: connectInstallationRequest
+          in: body
+          schema:
+            $ref: '#/definitions/ConnectInstallationRequest'
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: Assigned installation to house
-          content: {}
-        "404":
+        '404':
           description: House not found
-          content: {}
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /houses/{houseId}/integrations/audinfor:
+    post:
+      description: |
+        Assigns an Audinfor contract id to an existing house
+      summary: Assign Audinfor to house
+      tags:
+        - 🏠 House management
+      operationId: assignAudinforContractIdToHouse
+      parameters:
+        - name: houseId
+          in: path
+          description: Alphanumeric id from a house
+          required: true
+          type: string
+        - name: assignAudinforContractIdToHouse
+          in: body
+          description: Request
+          schema:
+            $ref: '#/definitions/AssignAudinforContractIdToHouse'
+      responses:
+        '202':
+          description: Audinfor contract id successfully assigned to house
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/HttpErrorForbidden'
+        '404':
+          description: House not found
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
-      x-codegen-request-body-name: connectInstallationRequest
+        - key: []
+
   /supplies/{supplyId}/consumptions:
     get:
       description: |
         Returns the consumption of a supply. The date range depends of the startDate & endDate parameters and the grouping depends on the granularity parameter.
+      deprecated: true
+      tags:
+        - 💡Energy
       operationId: getHouseConsumption
       parameters:
-      - name: supplyId
-        in: path
-        description: Refers to the CUPS of the house or the public supply id
-        required: true
-        schema:
+        - name: supplyId
+          in: path
+          description: Refers to the CUPS of the house or the public supply id
+          required: true
           type: string
-      - name: startDate
-        in: query
-        description: "Start date to filter from, for example 2020-01-01T01:00:00"
-        required: true
-        schema:
+        - name: startDate
+          in: query
+          description: Start date to filter from, for example 2020-01-01T01:00:00
+          required: true
           type: string
           format: date-time
-      - name: endDate
-        in: query
-        description: "End date to filter to, for example 2022-01-01T01:00:00"
-        required: true
-        schema:
+        - name: endDate
+          in: query
+          description: End date to filter to, for example 2022-01-01T01:00:00
+          required: true
           type: string
           format: date-time
-      - name: granularity
-        in: query
-        description: Date range to group by
-        required: true
-        schema:
+        - name: granularity
+          in: query
+          description: Date range to group by
+          required: true
           type: string
           enum:
-          - YEARLY
-          - MONTHLY
-          - DAILY
-          - HOURLY
+            - YEARLY
+            - MONTHLY
+            - DAILY
+            - HOURLY
       responses:
-        "200":
+        '200':
           description: House consumptions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HouseDataConsumption'
-        "401":
+          schema:
+            $ref: '#/definitions/HouseDataConsumption'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      deprecated: true
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
-  /supplies/{cups}/cumulative-consumption:
-    get:
-      description: |
-        Returns the cumulative consumption for a house.
-      operationId: getHouseCumulativeConsumption
-      parameters:
-      - name: cups
-        in: path
-        description: ID of a house
-        required: true
-        schema:
-          type: string
-      - name: date
-        in: query
-        description: "Current day, for example 2023-01-01T00:00:00"
-        required: true
-        schema:
-          type: string
-          format: date-time
-      responses:
-        "200":
-          description: House consumption cumulative consumption (kWh)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CumulativeConsumption'
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      deprecated: true
+        - key: []
+
   /users/{userId}/upload-dni:
     get:
-      tags:
-      - 👤 User management
-      - Create Datadis integration
+      description: |
+        ## Upload DNI
+        > ### 📘 Learn how to use it
+        >
+        > This endpoint not only returns a HTTP code response, but also a structure containing a **signed URL** to immediately perform a **PUT request** in order to upload the **JPG file** of the front part of the ID. An example is provided below.
+        >
+        >### Step 1: GET request with the userId as a parameter to obtain the upload URL
+        >
+        > **cURL**
+        > ```bash
+        >  $∼ curl --request GET
+        >     --url 'https://connect.clever.gy/{{userId}}/upload-dni'
+        >     --header 'accept: application/json'
+        > ```
+        >
+        > **Response**
+        > ```json
+        > $∼ {"url": "https://signed-url-to-upload-the-local-file"}
+        > ```
+        >
+        > ### Step 2: PUT the local file to the returned URL. Please note that the URL expires in **15 minutes** for security reasons.
+        >
+        > **cURL**
+        > ```bash
+        > $∼ curl --request PUT \
+        >      --url 'https://signed-url-to-upload-the-local-file' \
+        >      --header 'content-type: application/jpg' \
+        >      --header 'other-headers' \
+        >      --data 'local-path-to-invoice-file.jpg'
+        > ```
       summary: Upload DNI
-      description: "## Upload DNI\n> ### 📘 Learn how to use it\n> \n> This endpoint\
-        \ not only returns a HTTP code response, but also a structure containing a\
-        \ **signed URL** to immediately perform a **PUT request** in order to upload\
-        \ the **JPG file** of the front part of the ID. An example is provided below.\n\
-        > \n>### Step 1: GET request with the userId as a parameter to obtain the\
-        \ upload URL\n> \n> **cURL**\n> ```bash\n>  $∼ curl --request GET \n>    \
-        \ --url 'https://connect.clever.gy/{{userId}}/upload-dni' \n>     --header\
-        \ 'accept: application/json'\n> ```\n> \n> **Response**\n> ```json\n> $∼ {\"\
-        url\": \"https://signed-url-to-upload-the-local-file\"}\n> ```\n> \n> ###\
-        \ Step 2: PUT the local file to the returned URL. Please note that the URL\
-        \ expires in **15 minutes** for security reasons.\n> \n> **cURL**\n> ```bash\n\
-        > $∼ curl --request PUT \\\n>      --url 'https://signed-url-to-upload-the-local-file'\
-        \ \\\n>      --header 'content-type: application/jpg' \\\n>      --header\
-        \ 'other-headers' \\\n>      --data 'local-path-to-invoice-file.jpg'\n> ```\n"
+      tags:
+        - 👤 User management
+        
+
       operationId: uploadDni
       parameters:
-      - name: userId
-        in: path
-        description: ID of user
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
           type: string
       responses:
-        "200":
-          description: "A signed, temporary bucket url to upload a dni image. To upload\
-            \ a file a PUT request adding the file as form data"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UploadDniUrl'
-        "401":
+        '200':
+          description: A signed, temporary bucket url to upload a dni image.
+            To upload a file a PUT request adding the file as form data
+          schema:
+            $ref: '#/definitions/UploadDniUrl'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
+        - key: []
+
   /tips:
     get:
-      tags:
-      - Saving Tips
-      summary: Return general tips
       description: Get all public tips
+      summary: Return general tips
+      tags:
+        - Saving Tips
       operationId: getPublicSavingTips
+      produces: ['application/json']
       responses:
-        "200":
+        '200':
           description: List of public saving tips
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PublicSavingTip'
+          schema:
+            type: array
+            items:
+              type: object
+              $ref: '#/definitions/PublicSavingTip'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
       security: []
   /energy-communities/{energyCommunityId}/houses:
     post:
-      tags:
-      - 🏘️ Energy communities
-      summary: Assign a house to an energy community
       description: |
         ## Assign a house to an energy community
+      summary: Assign a house to an energy community
+      tags:
+        - 🏘️ Energy communities
       operationId: assignHouseToEnergyCommunity
       parameters:
-      - name: energyCommunityId
-        in: path
-        description: Alphanumeric id from energy community
-        required: true
-        schema:
+        - name: energyCommunityId
+          in: path
+          description: Alphanumeric id from energy community
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/EnergyCommunityHouse'
-        required: false
+        - name: energyCommunityHouse
+          in: body
+          schema:
+            $ref: '#/definitions/EnergyCommunityHouse'
+      security:
+        - key: []
       responses:
-        "201":
+        '201':
           description: House successfully assigned
-          content: {}
-        "400":
+        '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorBadRequest'
-        "401":
+          schema:
+            $ref: '#/definitions/HttpErrorBadRequest'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: energyCommunityHouse
+          schema:
+            $ref: '#/definitions/Error'
+
   /energy-communities/{energyCommunityId}/update-share:
     post:
-      tags:
-      - 🏘️ Energy communities
-      summary: Update share
       description: |
         ## Update share
         Update share for an energy community house
+      summary: Update share
+      tags:
+        - 🏘️ Energy communities
       operationId: updateEnergyCommunityHouseShare
       parameters:
-      - name: energyCommunityId
-        in: path
-        description: Alphanumeric id from energy community
-        required: true
-        schema:
+        - name: energyCommunityId
+          in: path
+          description: Alphanumeric id from energy community
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/UpdateEnergyCommunityHouseRequest'
-        required: false
+        - name: UpdateEnergyCommunityHouseRequest
+          in: body
+          schema:
+            $ref: '#/definitions/UpdateEnergyCommunityHouseRequest'
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: House successfully updated
-          content: {}
-        "400":
+        '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorBadRequest'
-        "401":
+          schema:
+            $ref: '#/definitions/HttpErrorBadRequest'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '403':
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorForbidden'
+        '404':
           description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: UpdateEnergyCommunityHouseRequest
+          schema:
+            $ref: '#/definitions/Error'
+
   /energy-communities/{communityId}/remove-house:
     post:
-      tags:
-      - 🏘️ Energy communities
-      summary: Remove a house from an energy community
       description: |
         ## Remove a house from an energy community
         Unlink a house from an energy community
+      summary: Remove a house from an energy community
+      tags:
+        - 🏘️ Energy communities
       operationId: removeEnergyCommunityHouseFromInstallation
       parameters:
-      - name: communityId
-        in: path
-        description: Alphanumeric id from energy community
-        required: true
-        schema:
+        - name: communityId
+          in: path
+          description: Alphanumeric id from energy community
+          required: true
           type: string
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: '#/components/schemas/RemoveEnergyCommunityHouseRequest'
-        required: false
+        - name: removeEnergyCommunityHouseRequest
+          in: body
+          schema:
+            $ref: '#/definitions/RemoveEnergyCommunityHouseRequest'
+      security:
+        - key: []
       responses:
-        "200":
+        '200':
           description: House successfully removed
-          content: {}
-        "400":
+        '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorBadRequest'
-        "401":
+          schema:
+            $ref: '#/definitions/HttpErrorBadRequest'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "403":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '403':
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorForbidden'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorForbidden'
+        '404':
           description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-      - key: []
-      x-codegen-request-body-name: removeEnergyCommunityHouseRequest
+          schema:
+            $ref: '#/definitions/Error'
+
   /auth/{userId}/token:
     get:
-      tags:
-      - Access control
       description: |
         Returns user jwt based on the email. The jwt can be used in some endpoints of the API to obtain energy data from the user.
+      tags:
+        - Access control
       operationId: retrieveUserAccessToken
       parameters:
-      - name: userId
-        in: path
-        description: Clevergy ID from the user (also available with email)
-        required: true
-        schema:
+        - name: userId
+          in: path
+          description: Clevergy ID from the user (also available with email)
+          required: true
           type: string
       responses:
-        "200":
+        '200':
           description: User jwt
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthUser'
-        "401":
+          schema:
+            $ref: '#/definitions/AuthUser'
+        '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorUnauthorized'
-        "404":
+          schema:
+            $ref: '#/definitions/HttpErrorUnauthorized'
+        '404':
           description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorNotFound'
+          schema:
+            $ref: '#/definitions/HttpErrorNotFound'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          schema:
+            $ref: '#/definitions/Error'
       security:
-      - key: []
-components:
-  schemas:
-    UploadDniUrl:
-      type: object
-      properties:
-        url:
-          type: string
-        urlBack:
-          type: string
-    AuthUser:
-      type: object
-      properties:
-        jwt:
-          type: string
-          example: eyJhbGciOiJSJhdWQiOiJodHRwczopdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXRF0IjoxNzAzODU0NzY5LCJpc3MiOiJwdWJsaWMtZnJvbnQtYmFja0BjbGV2ZXJneS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6InB1YmxpYy1mcm9udC1iYWNrQGNXA
-        userId:
-          type: string
-          example: U7Q02aMJm9VokGsNIZmID3BK25p3
-    UserCreated:
-      type: object
-      properties:
-        id:
-          type: string
-          example: U4NW5zdmstUtRZW5Oi3S2CR5l0U2
-        status:
-          type: string
-          example: INITIAL
-    UserRegistration:
-      required:
-      - email
+        - key: []
+
+definitions:
+  UploadDniUrl:
+    type: object
+    properties:
+      url:
+        type: string
+      urlBack:
+        type: string
+
+  AuthUser:
+    type: object
+    properties:
+      jwt:
+        type: string
+        example: 'eyJhbGciOiJSJhdWQiOiJodHRwczopdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXRF0IjoxNzAzODU0NzY5LCJpc3MiOiJwdWJsaWMtZnJvbnQtYmFja0BjbGV2ZXJneS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6InB1YmxpYy1mcm9udC1iYWNrQGNXA'
+      userId:
+        type: string
+        example: 'U7Q02aMJm9VokGsNIZmID3BK25p3'
+
+  UsersPage:
+    type: object
+    description: Paginated list of users
+    properties:
+      size:
+        type: integer
+        description: Number of elements in the page requested
+      page:
+        type: integer
+        description: Number of the page requested
+      totalPages:
+        type: integer
+        description: Number of total pages
+      totalElements:
+        type: integer
+        description: Number of total elements in the list
+      elements:
+        type: array
+        description: List of users
+        items:
+          type: object
+          $ref: '#/definitions/UsersPageElement'
+    required:
+      - size
+      - page
+      - totalPages
+      - totalElements
+      - elements
+
+  UsersPageElement:
+    type: object
+    properties:
+      id:
+        type: string
+        example: 'U4NW5zdmstUtRZW5Oi3S2CR5l0U2'
+      name:
+        type: string
+        example: 'Pedro'
+      surname:
+        type: string
+        example: 'García'
+      email:
+        type: string
+        example: 'pedro.garcia@mail.com'
+      nif:
+        type: string
+        example: '00000000T'
+
+  UserCreated:
+    type: object
+    properties:
+      id:
+        type: string
+        example: 'U4NW5zdmstUtRZW5Oi3S2CR5l0U2'
+      status:
+        type: string
+        example: 'INITIAL'
+
+  UserRegistration:
+    type: object
+    required:
       - name
-      type: object
-      properties:
-        name:
+      - email
+    properties:
+      name:
+        type: string
+        example: 'John'
+      surname:
+        type: string
+        example: 'Doe'
+      email:
+        type: string
+        format: email
+        example: 'john.doe@example.com'
+      dni:
+        type: string
+        example: '12345678X'
+      termsAndConditions:
+        type: boolean
+        description: '@deprecated'
+      authorizedSupplies:
+        type: array
+        items:
           type: string
-          example: John
-        surname:
-          type: string
-          example: Doe
-        email:
-          type: string
-          format: email
-          example: john.doe@example.com
-        dni:
-          type: string
-          example: 12345678X
-        termsAndConditions:
-          type: boolean
-        authorizedSupplies:
-          type: array
-          items:
-            type: string
-    UserStatus:
-      type: object
-      properties:
-        userStatus:
-          type: string
-          enum:
+        description: '@deprecated'
+
+  UserStatus:
+    type: object
+    properties:
+      userStatus:
+        type: string
+        enum:
           - INITIAL
           - ACCEPTED_CONDITIONS
           - WAITING_FOR_HOUSES
@@ -1248,528 +1142,533 @@ components:
           - IS_NOT_HOLDER
           - VALIDATING_HOLDER
           - COMPLETED
-        status:
-          type: string
-          description: '@deprecated use `userStatus` instead'
-          enum:
+      status:
+        type: string
+        description: '@deprecated use `userStatus` instead'
+        enum:
           - INITIAL
           - WAITING_FOR_HOUSES
           - NOT_HOLDER
           - COMPLETED
-        hasIdentityDocumentValidated:
-          type: boolean
-    UserHouses:
-      type: array
-      items:
-        type: object
-        properties:
-          houseId:
-            type: string
-            example: 8ec307fc-3b4c-4f6f-b320-fa2587990a46
-          cups:
-            type: string
-            example: ES0022123456781234AB0F
-          address:
-            type: string
-            example: Leonardo da Vinci 7
-          postalCode:
-            type: string
-            example: "41092"
-          firstConsumptionDate:
-            type: string
-            format: date-time
-          lastConsumptionDate:
-            type: string
-            format: date-time
-    CreateHouse:
+      hasIdentityDocumentValidated:
+        type: boolean
+
+  UserHouses:
+    type: array
+    items:
       type: object
       properties:
-        address:
+        houseId:
           type: string
-          description: House address
-          example: Leonardo da Vinci 7
-        postalCode:
-          type: string
-          description: House postal code
-          example: "41092"
+          example: '8ec307fc-3b4c-4f6f-b320-fa2587990a46'
         cups:
           type: string
-          description: "When filled, CUPS of the supply to connect"
-          example: ES0022123456781234AB0F
-      description: Create house request
-    HouseCreated:
-      type: object
-      properties:
-        id:
-          type: string
-          description: House id
-          example: f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454
+          example: 'ES0022123456781234AB0F'
         address:
           type: string
-          description: House address
-          example: Leonardo da Vinci 7
+          example: 'Leonardo da Vinci 7'
         postalCode:
           type: string
-          description: House postal code
-          example: "41092"
-      description: Create house response
-    EnergyItem:
-      required:
-      - date
-      type: object
-      properties:
-        date:
+          example: '41092'
+        firstConsumptionDate:
           type: string
           format: date-time
-        solar:
+          example: '2022-12-31T23:00:00'
+        lastConsumptionDate:
+          type: string
+          format: date-time
+          example: '2023-12-31T22:00:00'
+
+  CreateHouse:
+    type: object
+    description: Create house request
+    properties:
+      address:
+        type: string
+        description: House address
+        example: 'Leonardo da Vinci 7'
+      postalCode:
+        type: string
+        description: House postal code
+        example: '41092'
+      cups:
+        type: string
+        description: When filled, CUPS of the supply to connect
+        example: 'ES0022123456781234AB0F'
+
+  HouseCreated:
+    type: object
+    description: Create house response
+    properties:
+      id:
+        type: string
+        description: House id
+        example: 'f8c3de3d-1fea-4d7c-a8b0-29f63c4c3454'
+      address:
+        type: string
+        description: House address
+        example: 'Leonardo da Vinci 7'
+      postalCode:
+        type: string
+        description: House postal code
+        example: '41092'
+
+  EnergyItem:
+    type: object
+    properties:
+      date:
+        type: string
+        format: date-time
+      solar:
+        type: object
+        properties:
+          production:
+            type: number
+            format: float
+      house:
+        type: object
+        properties:
+          consumption:
+            type: number
+            format: float
+          selfConsumption:
+            type: number
+            format: float
+      grid:
+        type: object
+        properties:
+          import:
+            type: number
+            format: float
+          export:
+            type: number
+            format: float
+      battery:
+        type: object
+        properties:
+          charge:
+            type: number
+            format: float
+          discharge:
+            type: number
+            format: float
+      energyCommunities:
+        type: array
+        items:
           type: object
           properties:
-            production:
-              type: number
-              format: float
-        house:
-          type: object
-          properties:
-            consumption:
-              type: number
-              format: float
-            selfConsumption:
-              type: number
-              format: float
-        grid:
-          type: object
-          properties:
-            import:
-              type: number
-              format: float
-            export:
-              type: number
-              format: float
-        battery:
-          type: object
-          properties:
-            charge:
-              type: number
-              format: float
-            discharge:
-              type: number
-              format: float
-        energyCommunities:
-          type: array
-          items:
-            required:
-            - production
-            - type
-            type: object
-            properties:
-              type:
-                type: string
-                enum:
+            type:
+              type: string
+              enum:
                 - SOLAR
                 - WIND
                 - HYDRO
-              production:
-                type: number
-                format: float
-    CreateHouseContract:
-      type: object
-      properties:
-        contractPower:
-          type: array
-          description: "Contracted power. One item per period (P1, P2)"
-          example:
-          - 3.5
-          - 3.5
-          items:
-            type: number
-        startDate:
-          type: string
-          description: Contract start date
-          format: date-time
-        endDate:
-          type: string
-          description: Contract end date
-          format: date-time
-        codefare:
-          type: string
-          description: Contract codefare
-          example: 2.0TD
-        tariffName:
-          type: string
-          description: Contract tariff name
-          example: Tariff name
-        distributor:
-          type: string
-          description: Contract distributor
-          example: Energydistributor
-        provider:
-          type: string
-          description: Contract provider
-          example: Energyprovider
-      description: Create house contract request
-    SignedUrl:
-      type: object
-      properties:
-        url:
-          type: string
-          description: Signed url to put the object
-          example: https://signed_url_to_put_the_object
-      description: Bucket url to put a file
-    CreateHouseInvoice:
-      required:
-      - endDate
+            production:
+              type: number
+              format: float
+          required:
+            - type
+            - production
+    required:
+      - date
+
+  CreateHouseContract:
+    type: object
+    description: Create house contract request
+    properties:
+      contractPower:
+        type: array
+        items:
+          type: number
+        description: Contracted power. One item per period (P1, P2)
+        example: [3.5, 3.5]
+      startDate:
+        type: string
+        format: date-time
+        example: '2022-12-31T23:00:00'
+        description: Contract start date
+      endDate:
+        type: string
+        format: date-time
+        example: '2022-12-31T23:00:00'
+        description: Contract end date
+      codefare:
+        type: string
+        example: '2.0TD'
+        description: Contract codefare
+      tariffName:
+        type: string
+        example: 'Tariff name'
+        description: Contract tariff name
+      distributor:
+        type: string
+        example: '8'
+        description: Contract distributor
+      provider:
+        type: string
+        example: 'EnergyProvider'
+        description: Contract provider
+
+  SignedUrl:
+    type: object
+    description: Bucket url to put a file
+    properties:
+      url:
+        type: string
+        example: 'https://signed_url_to_put_the_object'
+        description: Signed url to put the object
+
+  CreateHouseInvoice:
+    type: object
+    description: Create house invoice request
+    required:
       - startDate
+      - endDate
       - totalCost
-      type: object
-      properties:
-        startDate:
-          type: string
-          description: Start of invoicing period
-          format: date
-          example: 2022-12-31
-        endDate:
-          type: string
-          description: End of invoicing period
-          format: date
-          example: 2022-12-31
-        totalCost:
-          type: number
-          description: Total cost in €
-          format: float
-          example: 0.883
-        energyConsumptionP1:
-          type: number
-          description: P1 consumptions in kWh
-          format: float
-          example: 0.883
-        energyConsumptionP2:
-          type: number
-          description: P2 consumptions in kWh
-          format: float
-          example: 0.883
-        energyConsumptionP3:
-          type: number
-          description: P3 consumptions in kWh
-          format: float
-          example: 0.883
-        totalEnergyConsumption:
-          type: number
-          description: Total consumptions in kWh
-          format: float
-          example: 0.883
-        energyCost:
-          type: number
-          description: Energy cost in €
-          format: float
-          example: 0.883
-        powerCost:
-          type: number
-          description: Power cost in €
-          format: float
-          example: 0.883
-        otherCost:
-          type: number
-          description: Sum of other costs in €
-          format: float
-          example: 0.883
-        discountCost:
-          type: number
-          description: Total discounts in €
-          format: float
-          example: 0.883
-        taxCost:
-          type: number
-          description: Total taxes in €
-          format: float
-          example: 0.883
-        selfConsumptionCost:
-          type: number
-          description: Total surplus of self consumption in €
-          format: float
-          example: -0.25
-      description: Create house invoice request
-    IntegrateSmartmeter:
-      required:
+    properties:
+      startDate:
+        type: string
+        format: date
+        example: '2022-12-31'
+        description: Start of invoicing period
+      endDate:
+        type: string
+        format: date
+        example: '2022-12-31'
+        description: End of invoicing period
+      totalCost:
+        type: number
+        format: float
+        example: '0.883'
+        description: Total cost in €
+      energyConsumptionP1:
+        type: number
+        format: float
+        example: '0.883'
+        description: P1 consumptions in kWh
+      energyConsumptionP2:
+        type: number
+        format: float
+        example: '0.883'
+        description: P2 consumptions in kWh
+      energyConsumptionP3:
+        type: number
+        format: float
+        example: '0.883'
+        description: P3 consumptions in kWh
+      totalEnergyConsumption:
+        type: number
+        format: float
+        example: '0.883'
+        description: Total consumptions in kWh
+      energyCost:
+        type: number
+        format: float
+        example: '0.883'
+        description: Energy cost in €
+      powerCost:
+        type: number
+        format: float
+        example: '0.883'
+        description: Power cost in €
+      otherCost:
+        type: number
+        format: float
+        example: '0.883'
+        description: Sum of other costs in €
+      discountCost:
+        type: number
+        format: float
+        example: '0.883'
+        description: Total discounts in €
+      taxCost:
+        type: number
+        format: float
+        example: '0.883'
+        description: Total taxes in €
+      selfConsumptionCost:
+        type: number
+        format: float
+        example: '-0.25'
+        description: Total surplus of self consumption in €
+
+  IntegrateSmartmeter:
+    type: object
+    description: Smartmeter integration request
+    required:
       - name
       - nif
       - termsAndConditions
-      type: object
-      properties:
-        name:
+    properties:
+      name:
+        type: string
+      surname:
+        type: string
+      nif:
+        type: string
+      termsAndConditions:
+        type: boolean
+
+  AssignAudinforUserIdToUser:
+    type: object
+    description: Audinfor user integration request
+    required:
+      - idCliente
+    properties:
+      idCliente:
+        type: string
+        example: '1234'
+
+  AssignAudinforContractIdToHouse:
+    type: object
+    description: Audinfor house integration request
+    required:
+      - contratoId
+    properties:
+      contratoId:
+        type: string
+        example: '1234'
+
+  AuthorizedSupplies:
+    type: object
+    properties:
+      supplies:
+        type: array
+        items:
           type: string
-        surname:
-          type: string
-        nif:
-          type: string
-        termsAndConditions:
-          type: boolean
-      description: Smartmeter integration request
-    AuthorizedSupplies:
-      type: object
-      properties:
-        supplies:
-          type: array
-          items:
-            type: string
-    UpdateDatadisIntegrationStatus:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Supply contract start date
-          example: CONNECTED
-          enum:
+
+  UpdateDatadisIntegrationStatus:
+    type: object
+    description: Update datadis integration status request
+    properties:
+      status:
+        type: string
+        example: 'CONNECTED'
+        description: Supply contract start date
+        enum:
           - CONNECTED
           - DISCONNECTED
-        eventDate:
-          type: string
-          description: Update status event date
-          format: date-time
-      description: Update datadis integration status request
-    HouseDataConsumption:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/HouseConsumption'
-        rateType:
-          type: string
-          example: REGULATED
-        total:
-          type: number
-          format: float
-          example: 0.883
-    HouseConsumption:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-          example: 2023-12-01T00:00:00Z
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserConsumptionCategory'
-        kwh:
-          type: number
-          format: float
-          example: 0.883
-    UserConsumptionCategory:
-      type: object
-      properties:
-        label:
-          type: string
-          example: Valle
-        kwh:
-          type: number
-          format: float
-          example: 0.883
-    CumulativeConsumption:
-      type: object
-      properties:
-        currentConsumption:
-          type: number
-          format: float
-          example: 150.3
-        estimatedConsumption:
-          type: number
-          format: float
-          example: 188.7
-        previousYearConsumption:
-          type: number
-          format: float
-          example: 204.1
-    PublicSavingTip:
-      type: object
-      properties:
-        title:
-          type: string
-          example: Elige neveras con buena calificación energética
-        text:
-          type: string
-          example: "Si tu nevera es antigua, plantéate comprar una nevera con  calificació\
-            n energética alta. Podrás ahorrar un 20% en tu factura."
-    EnergyCommunityHouse:
-      required:
+      eventDate:
+        type: string
+        format: date-time
+        example: '2023-12-31T22:00:00'
+        description: Update status event date
+
+  HouseDataConsumption:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/HouseConsumption'
+      rateType:
+        type: string
+        example: 'REGULATED'
+      total:
+        type: number
+        format: float
+        example: '0.883'
+
+  HouseConsumption:
+    type: object
+    properties:
+      date:
+        type: string
+        format: date-time
+        example: '2023-12-01T00:00:00Z'
+      categories:
+        type: array
+        items:
+          $ref: '#/definitions/UserConsumptionCategory'
+      kwh:
+        type: number
+        format: float
+        example: '0.883'
+
+  UserConsumptionCategory:
+    type: object
+    properties:
+      label:
+        type: string
+        example: 'Valle'
+      kwh:
+        type: number
+        format: float
+        example: 0.883
+
+  PublicSavingTip:
+    type: object
+    properties:
+      title:
+        type: string
+        example: 'Elige neveras con buena calificación energética'
+      text:
+        type: string
+        example: 'Si tu nevera es antigua, plantéate comprar una nevera con  calificación energética alta. Podrás ahorrar un 20% en tu factura.'
+
+  EnergyCommunityHouse:
+    type: object
+    description: Assign a house to an energy community
+    required:
       - houseId
       - share
-      type: object
-      properties:
-        houseId:
-          type: string
-          description: House Id
-        share:
-          type: number
-          description: Share (in percentage) in the energy community
-        installationId:
-          type: string
-          description: Installation Id
-      description: Assign a house to an energy community
-    RemoveEnergyCommunityHouseRequest:
-      required:
+    properties:
+      houseId:
+        type: string
+        description: House Id
+      share:
+        type: number
+        description: Share (in percentage) in the energy community
+      installationId:
+        type: string
+        description: Installation Id
+
+  RemoveEnergyCommunityHouseRequest:
+    type: object
+    description: Remove energy community house
+    required:
       - houseId
-      type: object
-      properties:
-        houseId:
-          type: string
-          description: House Id
-        installationId:
-          type: string
-          description: Installation Id
-      description: Remove energy community house
-    UpdateEnergyCommunityHouseRequest:
-      required:
+    properties:
+      houseId:
+        type: string
+        description: House Id
+      installationId:
+        type: string
+        description: Installation Id
+
+  UpdateEnergyCommunityHouseRequest:
+    type: object
+    description: Update energy community house share
+    required:
       - houseId
       - share
-      type: object
-      properties:
-        houseId:
-          type: string
-          description: House Id
-        share:
-          type: number
-          description: Share (in percentage) in the energy community
-        installationId:
-          type: string
-          description: Installation Id
-      description: Update energy community house share
-    HttpErrorUnauthorized:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Request date and time
-          example: 2023-12-26T10:23:19.508+00:00
-        status:
-          type: integer
-          description: Http error code
-          format: int32
-          example: 401
-        error:
-          type: string
-          description: Http error description
-          example: Unauthorized
-        path:
-          type: string
-          description: Request path
-          example: /auth/john.doe@gmail.com/token
-    HttpErrorNotFound:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Request date and time
-          example: 2023-12-26T10:23:19.508+00:00
-        status:
-          type: integer
-          description: Http error code
-          format: int32
-          example: 404
-        error:
-          type: string
-          description: Http error description
-          example: Not Found
-        path:
-          type: string
-          description: Request path
-          example: /auth/alice.smith@gmail.com/token
-    HttpErrorBadRequest:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Request date and time
-          example: 2023-12-26T10:23:19.508+00:00
-        status:
-          type: integer
-          description: Http error code
-          format: int32
-          example: 400
-        error:
-          type: string
-          description: Http error description
-          example: Bad Request
-        path:
-          type: string
-          description: Request path
-          example: /users
-    HttpErrorForbidden:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Request date and time
-          example: 2023-12-26T10:23:19.508+00:00
-        status:
-          type: integer
-          description: Http error code
-          format: int32
-          example: 403
-        error:
-          type: string
-          description: Http error description
-          example: Forbidden
-        path:
-          type: string
-          description: Request path
-          example: /users/U4NW5zdmstUtRZW5Oi3S2CR5l0U2/houses
-    Error:
-      required:
+    properties:
+      houseId:
+        type: string
+        description: House Id
+      share:
+        type: number
+        description: Share (in percentage) in the energy community
+      installationId:
+        type: string
+        description: Installation Id
+
+  HttpErrorUnauthorized:
+    type: object
+    properties:
+      timestamp:
+        description: Request date and time
+        type: string
+        example: '2023-12-26T10:23:19.508+00:00'
+      status:
+        description: Http error code
+        type: integer
+        format: int32
+        example: 401
+      error:
+        description: Http error description
+        type: string
+        example: 'Unauthorized'
+      path:
+        description: Request path
+        type: string
+        example: '/auth/john.doe@gmail.com/token'
+
+  HttpErrorNotFound:
+    type: object
+    properties:
+      timestamp:
+        description: Request date and time
+        type: string
+        example: '2023-12-26T10:23:19.508+00:00'
+      status:
+        description: Http error code
+        type: integer
+        format: int32
+        example: 404
+      error:
+        description: Http error description
+        type: string
+        example: 'Not Found'
+      path:
+        description: Request path
+        type: string
+        example: '/auth/alice.smith@gmail.com/token'
+
+  HttpErrorBadRequest:
+    type: object
+    properties:
+      timestamp:
+        description: Request date and time
+        type: string
+        example: '2023-12-26T10:23:19.508+00:00'
+      status:
+        description: Http error code
+        type: integer
+        format: int32
+        example: 400
+      error:
+        description: Http error description
+        type: string
+        example: 'Bad Request'
+      path:
+        description: Request path
+        type: string
+        example: '/users'
+
+  HttpErrorForbidden:
+    type: object
+    properties:
+      timestamp:
+        description: Request date and time
+        type: string
+        example: '2023-12-26T10:23:19.508+00:00'
+      status:
+        description: Http error code
+        type: integer
+        format: int32
+        example: 403
+      error:
+        description: Http error description
+        type: string
+        example: 'Forbidden'
+      path:
+        description: Request path
+        type: string
+        example: '/users/U4NW5zdmstUtRZW5Oi3S2CR5l0U2/houses'
+
+  Error:
+    type: object
+    required:
       - code
       - message
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-    ConnectInstallationRequest:
-      required:
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+
+  ConnectInstallationRequest:
+    type: object
+    properties:
+      integrationId:
+        type: number
+      stationCode:
+        type: string
+    required:
       - integrationId
       - stationCode
-      type: object
-      properties:
-        integrationId:
-          type: number
-        stationCode:
-          type: string
-    AssignAudinforUserIdToUser:
-      required:
-      - idCliente
-      type: object
-      properties:
-        idCliente:
-          type: string
-          example: "1234"
-      description: Audinfor user integration request
-    AssignAudinforContractIdToHouse:
-      required:
-      - contratoId
-      type: object
-      properties:
-        contratoId:
-          type: string
-          example: "1234"
-      description: Audinfor house integration request
-  securitySchemes:
-    firebase:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: ""
-          scopes: {}
-      x-google-issuer: public-front-back@clevergy.iam.gserviceaccount.com
-      x-google-jwks_uri: https://www.googleapis.com/robot/v1/metadata/x509/public-front-back@clevergy.iam.gserviceaccount.com
-      x-google-audiences: https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit
-    key:
-      type: apiKey
-      name: clevergy-api-key
-      in: header
-x-google-endpoints:
-- name: connect.clever.gy
-  allowCors: true
-x-google-backend:
-  address: https://public-front-back-tl56gypzra-ew.a.run.app
-x-original-swagger-version: "2.0"
+
+securityDefinitions:
+  firebase:
+    authorizationUrl: ''
+    flow: 'implicit'
+    type: 'oauth2'
+    x-google-issuer: 'public-front-back@clevergy.iam.gserviceaccount.com'
+    x-google-jwks_uri: 'https://www.googleapis.com/robot/v1/metadata/x509/public-front-back@clevergy.iam.gserviceaccount.com'
+    x-google-audiences: 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit'
+  key:
+    type: apiKey
+    in: header
+    name: clevergy-api-key
