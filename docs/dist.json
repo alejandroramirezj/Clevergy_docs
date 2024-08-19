@@ -21,13 +21,9 @@
         "summary": "Create new user",
         "description": "## Create new user\n",
         "tags": [
-          "👤 User management",
-          "Create solar user",
-          "Create FTP integration",
-          "Create first user",
-          "Create Datadis integration",
-          "Create invoice",
-          "Obtain energy data from my users"
+          "👤 User management"
+          
+
         ],
         "operationId": "createUser",
         "requestBody": {
@@ -218,12 +214,7 @@
         "description": "## Create a house\nCreate a new house for the user\n",
         "summary": "Create a house",
         "tags": [
-          "🏠 House management",
-          "Create FTP integration",
-          "Create solar user",
-          "Create Datadis integration",
-          "Create invoice",
-          "Obtain energy data from my users"
+          "🏠 House management"
         ],
         "operationId": "createHouse",
         "parameters": [
@@ -419,9 +410,8 @@
         "description": "## Link a smartmeter to a house\n\nIn order to **[verify the identity of the user with the aim of integrating with the smartmeter](https://docs.clever.gy/?path=/docs/how-to-set-up-clevergy-create-datadis-integration--docs)** is necessary that the user meets one of the following requirements, otherwise a 403 forbidden will be returned:\n* Have a house created with CUPS Code\n* Have an invoice uploaded\n* Have an ID documentation uploaded\n\n> 👀 Take into account that thee user information you introduce in the payload will overwrite the existing one.\n",
         "summary": "Link a smartmeter to a house",
         "tags": [
-          "🔌 Integrations",
-          "Create Datadis integration",
-          "Obtain energy data from my users"
+          "🔌 Integrations"
+                   
         ],
         "operationId": "integrateSmartmeter",
         "parameters": [
@@ -572,8 +562,8 @@
         "description": "## Return house energy\nReturn the energy of a house for a date period (from startDate to endDate) grouped by date based on granularity\n",
         "summary": "Return house energy",
         "tags": [
-          "💡Energy",
-          "Obtain energy data from my users"
+          "💡Energy"
+         
         ],
         "operationId": "findEnergyByHouseId",
         "parameters": [
@@ -714,9 +704,7 @@
         "description": "## Create an invoice \n> ### 📘 Learn how to use it\n> \n> This endpoint not only returns a HTTP code response, but also a structure containing a **signed URL** to immediately perform a **PUT request** in order to upload the **PDF file** of the invoice. An example is provided below.\n> \n> ### Step 1: POST the invoice metadata and obtain the upload URL\n> \n> **cURL**\n> ```bash\n> $∼ curl --request POST \\\n>      --url https://connect.clever.gy/houses/houseId/invoices \\\n>      --header 'accept: application/json' \\\n>      --header 'content-type: application/json' \\\n>      --header 'other-headers' \\\n>      --data '{\"startDate\": \"2023-12-31\", \"endDate\":\"2023-12-31\", \"totalCost\": 41.0}'\n> ```\n> \n> **Response**\n> ```json\n> $∼ {\"url\": \"https://signed-url-to-upload-the-local-file\"}\n> ```\n> \n> ### Step 2: PUT the local file to the returned URL. Please note that the URL expires in **15 minutes** for security reasons.\n> \n> **cURL**\n> ```bash\n> $∼ curl --request PUT \\\n>      --url 'https://signed-url-to-upload-the-local-file' \\\n>      --header 'content-type: application/pdf' \\\n>      --header 'other-headers' \\\n>      --data 'local-path-to-invoice-file.pdf'\n> ```\n",
         "summary": "Create an invoice",
         "tags": [
-          "🏠 House management",
-          "Create Datadis integration",
-          "Create invoice"
+          "🏠 House management"
         ],
         "operationId": "createHouseInvoice",
         "parameters": [
@@ -1093,9 +1081,8 @@
         "description": "## Link installation to a house\n",
         "summary": "☀️ Link installation to a house",
         "tags": [
-          "🔌 Integrations",
-          "Create solar user",
-          "Obtain energy data from my users"
+          "🔌 Integrations"
+         
         ],
         "operationId": "connectInstallation",
         "parameters": [
