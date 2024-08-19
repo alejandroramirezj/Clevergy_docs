@@ -1314,8 +1314,7 @@
         "description": "## Upload DNI\n> ### 📘 Learn how to use it\n> \n> This endpoint not only returns a HTTP code response, but also a structure containing a **signed URL** to immediately perform a **PUT request** in order to upload the **JPG file** of the front part of the ID. An example is provided below.\n> \n>### Step 1: GET request with the userId as a parameter to obtain the upload URL\n> \n> **cURL**\n> ```bash\n>  $∼ curl --request GET \n>     --url 'https://connect.clever.gy/{{userId}}/upload-dni' \n>     --header 'accept: application/json'\n> ```\n> \n> **Response**\n> ```json\n> $∼ {\"url\": \"https://signed-url-to-upload-the-local-file\"}\n> ```\n> \n> ### Step 2: PUT the local file to the returned URL. Please note that the URL expires in **15 minutes** for security reasons.\n> \n> **cURL**\n> ```bash\n> $∼ curl --request PUT \\\n>      --url 'https://signed-url-to-upload-the-local-file' \\\n>      --header 'content-type: application/jpg' \\\n>      --header 'other-headers' \\\n>      --data 'local-path-to-invoice-file.jpg'\n> ```\n",
         "summary": "Upload DNI",
         "tags": [
-          "👤 User management",
-          "Create Datadis integration"
+          "👤 User management"
         ],
         "operationId": "uploadDni",
         "parameters": [
